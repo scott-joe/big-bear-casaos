@@ -1,31 +1,17 @@
-# Configuration for zigbee2mqtt setup
-
-# Name of the big-bear-zigbee2mqtt application
 name: big-bear-zigbee2mqtt
-# Service definitions for the big-bear-zigbee2mqtt application
 services:
-  # Service name: big-bear-zigbee2mqtt
-  # The `big-bear-zigbee2mqtt` service definition
   big-bear-zigbee2mqtt:
-    # Name of the container
     container_name: big-bear-zigbee2mqtt
-    # Image to be used for the container
     image: koenkk/zigbee2mqtt:2.9.1
-    # Container restart policy
     restart: unless-stopped
-    # Volumes to be mounted to the container
     volumes:
-      - /DATA/AppData/$AppID/data:/app/data
+      - /DATA/.docker/AppData/$AppID/data:/app/data
       - /run/udev:/run/udev:ro
-    # Ports mapping between host and container
     ports:
-      # Mapping port 8080 of the host to port 8080 of the container
-      - 8080:8080
-    # Environment variables
+      - '12183:8080'
     environment:
       - TZ=UTC
     devices:
-      # Make sure this matched your adapter location
       - /dev/serial/by-id/usb-Texas_Instruments_TI_CC2531_USB_CDC___0X00124B0018ED3DDF-if00:/dev/ttyACM0
     x-casaos:
       envs:
@@ -40,39 +26,28 @@ services:
           description:
             en_us: 'Container Path: /run/udev'
       ports:
-        - container: "8080"
+        - container: '8080'
           description:
             en_us: 'Container Port: 8080'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-zigbee2mqtt
-  # Detailed description for the application
   description:
     en_us: Zigbee to MQTT bridge, get rid of your proprietary Zigbee bridges
-  # Brief tagline for the application
   tagline:
     en_us: Zigbee to MQTT bridge
-  # Developer's information
   developer: koenkk
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/zigbee2mqtt.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Before you install read this: https://community.bigbeartechworld.com/t/added-zigbee2mqtt-to-bigbearcasaos/1337#documentation-3
-  # Title for the application
   title:
     en_us: Zigbee to MQTT bridge
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8080"
+  port_map: '12183'
+

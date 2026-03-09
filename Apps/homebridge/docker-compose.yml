@@ -1,26 +1,15 @@
-# Configuration for homebridge setup
-
-# Name of the big-bear-homebridge application
 name: big-bear-homebridge
-# Service definitions for the big-bear-homebridge application
 services:
-  # Service name: big-bear-homebridge
-  # The `big-bear-homebridge` service definition
   big-bear-homebridge:
-    # Name of the container
     container_name: big-bear-homebridge
-    # Image to be used for the container
     image: homebridge/homebridge:2024-05-02
-    # Container restart policy
     restart: unless-stopped
-    # Environment Variables
     environment:
-      - TZ=UTC # Timezone
+      - TZ=UTC
     privileged: true
     network_mode: host
-    # Volumes HOST:CONTAINER
     volumes:
-      - /DATA/AppData/$AppID/data:/homebridge
+      - /DATA/.docker/AppData/$AppID/data:/homebridge
     x-casaos:
       envs:
         - container: TZ
@@ -31,30 +20,20 @@ services:
           description:
             en_us: 'Container Path: /homebridge'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-homebridge
-  # Detailed description for the application
   description:
     en_us: HomeKit support for the impatient.
-  # Brief tagline for the application
   tagline:
     en_us: HomeKit support for the impatient.
-  # Developer's information
   developer: homebridge
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/homebridge.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: HomeBridge
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8581"
+  port_map: '8581'
+

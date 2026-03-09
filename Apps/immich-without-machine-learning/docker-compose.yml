@@ -1,29 +1,23 @@
-# Configuration for big-bear-immich-without-machine-learning setup
 name: big-bear-immich-without-machine-learning
-# Service definitions for the big-bear-immich-without-machine-learning application
 services:
-  # Main Immich Server service configuration
   immich-server:
-    container_name: immich-server # Name of the running container
-    image: ghcr.io/immich-app/immich-server:v2.5.6 # Image to be used
-    # extends:
-    #   file: hwaccel.transcoding.yml
-    #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
-    ports: # Mapping ports from the host OS to the container
-      - 2283:2283
-    volumes: # Mounting directories for persistent data storage
-      - /DATA/AppData/big-bear-immich/upload:/usr/src/app/upload
-    environment: # Setting environment variables
+    container_name: immich-server
+    image: ghcr.io/immich-app/immich-server:v2.5.6
+    ports:
+      - '12052:2283'
+    volumes:
+      - /DATA/.docker/AppData/big-bear-immich/upload:/usr/src/app/upload
+    environment:
       DB_HOSTNAME: immich-postgres
       DB_USERNAME: casaos
       DB_PASSWORD: casaos
       DB_DATABASE_NAME: immich
-      DB_PORT: "5432"
+      DB_PORT: '5432'
       REDIS_HOSTNAME: immich-redis
-    depends_on: # Dependencies to ensure the order of service startup
+    depends_on:
       - redis
       - database
-    restart: unless-stopped # Policy to restart unless stopped
+    restart: unless-stopped
     x-casaos:
       envs:
         - container: DB_HOSTNAME
@@ -49,28 +43,24 @@ services:
           description:
             en_us: 'Container Path: /usr/src/app/upload'
       ports:
-        - container: "2283"
+        - container: '2283'
           description:
             en_us: 'Container Port: 2283'
-  # Configuration for Redis service
   redis:
-    container_name: immich-redis # Name of the running container
-    image: redis:6.2.20-alpine@sha256:2185e741f4c1e7b0ea9ca1e163a3767c4270a73086b6bbea2049a7203212fb7f # patched for CVE-2025-49844
-    restart: always # Policy to always restart the container if it stops
-  # Configuration for Database service
+    container_name: immich-redis
+    image: redis:6.2.20-alpine@sha256:2185e741f4c1e7b0ea9ca1e163a3767c4270a73086b6bbea2049a7203212fb7f
+    restart: always
   database:
-    container_name: immich-postgres # Name of the running container
-    image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0 # Image to be used
-    environment: # Setting environment variables
+    container_name: immich-postgres
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
+    environment:
       POSTGRES_PASSWORD: casaos
       POSTGRES_USER: casaos
       POSTGRES_DB: immich
       PG_DATA: /var/lib/postgresql/data
-      # Uncomment the DB_STORAGE_TYPE: 'HDD' var if your database isn't stored on SSDs
-      # DB_STORAGE_TYPE: 'HDD'
-    volumes: # Mounting directories for persistent data storage
-      - /DATA/AppData/big-bear-immich/pgdata:/var/lib/postgresql/data
-    restart: always # Policy to always restart the container if it stops
+    volumes:
+      - /DATA/.docker/AppData/big-bear-immich/pgdata:/var/lib/postgresql/data
+    restart: always
     x-casaos:
       envs:
         - container: POSTGRES_PASSWORD
@@ -90,30 +80,20 @@ services:
           description:
             en_us: 'Container Path: /var/lib/postgresql/data'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: immich-server
-  # Detailed description for the application
   description:
     en_us: Self-hosted photo and video storage. This does not include the machine learning part.
-  # Brief tagline for the application
   tagline:
     en_us: Immich without machine learning
-  # Developer's information
   developer: immich
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/immich.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Immich without machine learning
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "2283"
+  port_map: '12052'
+

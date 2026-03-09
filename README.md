@@ -78,6 +78,20 @@ If you have a feature request please post in the [BigBearCommunity](https://comm
 https://github.com/bigbeartechworld/big-bear-casaos/archive/refs/heads/master.zip
 ```
 
+## Local Mapping Policy (fork customizations)
+
+If you maintain local defaults for mount paths and host ports, keep policy in dedicated files under `policy/`:
+- `policy/storage-policy.json`
+- `policy/port-policy.json`
+- `policy/credential-policy.json`
+`policy/app-default-mappings.json` remains as a legacy compatibility index for older tooling.
+Use placeholder-first credential defaults in manifests and keep any real/local secrets outside version control.
+Security checks are enforced in pre-commit (`pnpm run precommit:security`) and CI (changed-file credential/secret scans).
+Audit/rewrite preview:
+- `pnpm run policy:rewrite:preview`
+- `pnpm run policy:rewrite:preview -- --app plex --report policy/rewrite-preview.json`
+- `pnpm run policy:rewrite:write` (applies rewrites)
+
 ## App Store Suggestions
 
 If you have a suggestion for an app, please post in the [BigBearCommunity](https://community.bigbeartechworld.com) server.

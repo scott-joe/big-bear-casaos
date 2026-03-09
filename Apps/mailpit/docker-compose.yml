@@ -1,19 +1,16 @@
-# Configuration for big-bear-mailpit setup
 name: big-bear-mailpit
-# Service definitions for the big-bear-mailpit application
 services:
-  # Service name: app
   app:
-    image: axllent/mailpit:v1.29 # Image for the app service
-    container_name: mailpit # Container name for the app service
-    restart: unless-stopped # Restart policy for the container
-    volumes: # Volumes to mount for the app service
-      - /DATA/AppData/$AppID/data:/data
-    environment: # Environment variables for the app service
+    image: axllent/mailpit:v1.29
+    container_name: mailpit
+    restart: unless-stopped
+    volumes:
+      - /DATA/.docker/AppData/$AppID/data:/data
+    environment:
       - TZ=UTC
-    ports: # Ports to expose for the app service
-      - "8025:8025"
-      - "1025:1025"
+    ports:
+      - '12076:8025'
+      - '12077:1025'
     x-casaos:
       envs:
         - container: TZ
@@ -24,37 +21,27 @@ services:
           description:
             en_us: 'Container Path: /data'
       ports:
-        - container: "8025"
+        - container: '8025'
           description:
             en_us: 'Container Port: 8025'
-        - container: "1025"
+        - container: '1025'
           description:
             en_us: 'Container Port: 1025'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: Mailpit is a multi-platform email testing tool & API for developers.
-  # Brief tagline for the application
   tagline:
     en_us: Mailpit
-  # Developer's information
   developer: axllent
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps/apps/mailpit/logo.png
-  # Thumbnail image for the application (if any)
   thumbnail: https://github.com/axllent/mailpit/blob/develop/docs/screenshot.png
-  # Title for the application
   title:
     en_us: Mailpit
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8025"
+  port_map: '12076'
+

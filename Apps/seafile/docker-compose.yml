@@ -1,40 +1,26 @@
-# Configuration for seafile setup
-
-# Name of the big-bear-seafile application
 name: big-bear-seafile
-# Service definitions for the big-bear-seafile application
 services:
-  # Service name: big-bear-seafile
-  # The `big-bear-seafile` service definition
   big-bear-seafile:
-    # Name of the container
     container_name: big-bear-seafile
-    # Image to be used for the container
     image: seafileltd/seafile-mc:11.0.13
-    # Container restart policy
     restart: unless-stopped
-    # Service dependencies
     depends_on:
       big-bear-seafile-db:
         condition: service_healthy
       big-bear-seafile-memcached:
         condition: service_started
     volumes:
-      - /DATA/AppData/$AppID/shared:/shared
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/shared:/shared
     ports:
-      # Mapping port 8080 of the host to port 80 of the container
-      - "8080:80"
-      # - "443:443"  # If https is enabled, cancel the comment.
+      - '12145:80'
     environment:
-      - DB_HOST=big-bear-seafile-db # Specifies MySQL service host name.
-      - DB_ROOT_PASSWD=seafilepassword # Requested, the value should be root's password of MySQL service.
-      - TIME_ZONE=Etc/UTC # Optional, default is UTC. Should be uncomment and set to your local time zone.
-      - SEAFILE_ADMIN_EMAIL=admin@example.com # Specifies Seafile admin user, default is 'me@example.com'.
-      - SEAFILE_ADMIN_PASSWORD=asecret # Specifies Seafile admin password, default is 'asecret'.
-      - SEAFILE_SERVER_LETSENCRYPT=false # Whether to use https or not.
-      - SEAFILE_SERVER_HOSTNAME=docs.seafile.com # Specifies your host name if https is enabled.
-    # Networks to be attached to the container
+      - DB_HOST=big-bear-seafile-db
+      - DB_ROOT_PASSWD=seafilepassword
+      - TIME_ZONE=Etc/UTC
+      - SEAFILE_ADMIN_EMAIL=admin@example.com
+      - SEAFILE_ADMIN_PASSWORD=asecret
+      - SEAFILE_SERVER_LETSENCRYPT=false
+      - SEAFILE_SERVER_HOSTNAME=docs.seafile.com
     networks:
       - big_bear_seafile_network
     x-casaos:
@@ -65,22 +51,25 @@ services:
           description:
             en_us: 'Container Path: /shared'
       ports:
-        - container: "80"
+        - container: '80'
           description:
             en_us: 'Container Port: 80'
-  # Database service for seafile
   big-bear-seafile-db:
     image: mariadb:10.11
     container_name: big-bear-seafile-db
     environment:
-      - MYSQL_ROOT_PASSWORD=seafilepassword # Requested, set the root's password of MySQL service.
+      - MYSQL_ROOT_PASSWORD=seafilepassword
       - MYSQL_LOG_CONSOLE=true
       - MARIADB_AUTO_UPGRADE=1
     volumes:
-      - /DATA/AppData/$AppID/mysql:/var/lib/mysql
+      - /DATA/.docker/AppData/$AppID/mysql:/var/lib/mysql
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      test:
+        - CMD
+        - healthcheck.sh
+        - '--connect'
+        - '--innodb_initialized'
       start_period: 1m
       start_interval: 10s
       interval: 1m
@@ -103,47 +92,34 @@ services:
         - container: /var/lib/mysql
           description:
             en_us: 'Container Path: /var/lib/mysql'
-  # Memcached service for seafile
   big-bear-seafile-memcached:
     container_name: big-bear-seafile-memcached
     image: memcached:1.6.39
     entrypoint: memcached -m 256
     networks:
       - big_bear_seafile_network
-# Networks used by the application
 networks:
   big_bear_seafile_network:
     driver: bridge
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-seafile
-  # Detailed description for the application
   description:
     en_us: Seafile is an open source file sync and share platform, focusing on reliability and performance. Seafile's built-in collaborative document SeaDoc, make it easy for collaborative writing and publishing documents.
-  # Brief tagline for the application
   tagline:
     en_us: Seafile is an open source file sync and share platform, focusing on reliability and performance.
-  # Developer's information
   developer: seafile
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/seafile.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Before you install read this: https://community.bigbeartechworld.com/t/added-seafile-to-bigbearcasaos/1011#instructions-3
-  # Title for the application
   title:
     en_us: seafile
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8080"
+  port_map: '12145'
+

@@ -1,44 +1,28 @@
-# Configuration for big-bear-otel-lgtm setup
-
-# Name of the big-bear-otel-lgtm application
 name: big-bear-otel-lgtm
-# Service definitions for big-bear-otel-lgtm application
 services:
-  # Service name: big-bear-otel-lgtm
-  # The `big-bear-otel-lgtm` service definition
   big-bear-otel-lgtm:
-    # Name of the container
     container_name: big-bear-otel-lgtm
-    # Image to be used for the container
     image: grafana/otel-lgtm:0.19.1
-    # Container restart policy
     restart: unless-stopped
-    # Volumes to be mounted to the container
     volumes:
-      # Mounting the local otel-lgtm_data directory to /data inside the container
       - type: bind
         source: otel-lgtm_data
         target: /data
         bind:
           create_host_path: true
-    # Ports mapping between host and container
     ports:
-      # Mapping port 3000 of the host to port 3000 of the container
       - mode: ingress
         target: 3000
-        published: "3000"
+        published: '12097'
         protocol: tcp
-      # Mapping port 4317 of the host to port 4317 of the container  
       - mode: ingress
         target: 4317
-        published: "4317"
+        published: '4317'
         protocol: tcp
-      # Mapping port 4318 of the host to port 4318 of the container  
       - mode: ingress
         target: 4318
-        published: "4318"
+        published: '4318'
         protocol: tcp
-    # Networks to be attached to the container
     networks:
       - big-bear-otel-lgtm
     x-casaos:
@@ -102,27 +86,18 @@ networks:
   big-bear-otel-lgtm:
     driver: bridge
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-otel-lgtm
-  # Detailed description for the application
   description:
     en_us: An OpenTelemetry Backend in a Docker Image.
-  # Brief tagline for the application
   tagline:
     en_us: OpenTelemetry Backend
-  # Developer's information
   developer: Grafana Labs
-  # Author of this particular configuration
   author: Konrad Botor (Forinil)
-  # Icon URL for the application
   icon: https://www.gravatar.com/avatar/31cea69afa424609b2d83621b4d47f1d?s=120&r=g&d=404
-  # Thumbnail image for the application (if any)
   thumbnail: https://raw.githubusercontent.com/grafana/docker-otel-lgtm/main/img/overview.png
-  # Installation tips
   tips:
     before_install:
       en_us: |
@@ -131,10 +106,8 @@ x-casaos:
       en_uk: |-
         Read this before installing: https://github.com/grafana/docker-otel-lgtm/
         and https://grafana.com/blog/2024/03/13/an-opentelemetry-backend-in-a-docker-image-introducing-grafana/otel-lgtm/
-  # Title for the application
   title:
     en_us: OTEL LGTM
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "3000"
+  port_map: '12097'
+

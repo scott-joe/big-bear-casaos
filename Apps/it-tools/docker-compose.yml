@@ -1,52 +1,31 @@
-# Configuration for it-tools setup
-
-# Name of the big-bear-it-tools application
 name: big-bear-it-tools
-# Service definitions for the big-bear-it-tools application
 services:
-  # Service name: app
-  # The `app` service definition
   app:
-    # Name of the container
     container_name: big-bear-it-tools
-    # Image to be used for the container
     image: corentinth/it-tools:2023.11.2-7d94e11
-    # Container restart policy
     restart: unless-stopped
-    # Ports mapping between host and container
     ports:
-      # Mapping port 8080 of the host to port 80 of the container
-      - "8080:80"
+      - '12054:80'
     x-casaos:
       ports:
-        - container: "80"
+        - container: '80'
           description:
             en_us: 'Container Port: 80'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: Collection of handy online tools for developers, with great UX as a web app.
-  # Brief tagline for the application
   tagline:
     en_us: IT Tools
-  # Developer's information
   developer: corentinth
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/it-tools.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: IT Tools
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8080"
+  port_map: '12054'
+

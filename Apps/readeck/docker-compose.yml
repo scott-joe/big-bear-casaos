@@ -1,40 +1,25 @@
-# Configuration for Readeck setup
-# Readeck is a self-hosted bookmark manager and read-it-later application
-
-# Name of the big-bear-readeck application
 name: big-bear-readeck
-# Service definitions for the big-bear-readeck application
 services:
-  # Service name: big-bear-readeck
-  # The main Readeck service definition
   big-bear-readeck:
-    # Name of the container
     container_name: big-bear-readeck
-    # Image to be used for the container
     image: codeberg.org/readeck/readeck:0.21.6
-    # Container restart policy
     restart: unless-stopped
-    # Environment variables for Readeck configuration
     environment:
-      # Defines the application log level. Can be error, warn, info, debug.
       - READECK_LOG_LEVEL=info
-      # The IP address on which Readeck listens
       - READECK_SERVER_HOST=0.0.0.0
-      # The TCP port on which Readeck listens
       - READECK_SERVER_PORT=8000
-      # Log format (json, text, or dev)
       - READECK_LOG_FORMAT=text
-    # Volumes to be mounted to the container
     volumes:
-      # Volume mapping for persistent data storage
-      - /DATA/AppData/$AppID/data:/readeck
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/data:/readeck
     ports:
-      # Mapping port 8000 of the host to port 8000 of the container
-      - "8000:8000"
-    # Health check configuration
+      - '12138:8000'
     healthcheck:
-      test: ["CMD", "/bin/readeck", "healthcheck", "-config", "config.toml"]
+      test:
+        - CMD
+        - /bin/readeck
+        - healthcheck
+        - '-config'
+        - config.toml
       interval: 30s
       timeout: 2s
       retries: 3
@@ -57,39 +42,28 @@ services:
           description:
             en_us: 'Container Path: /readeck'
       ports:
-        - container: "8000"
+        - container: '8000'
           description:
             en_us: 'Container Port: 8000'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-readeck
-  # Detailed description for the application
   description:
     en_us: Readeck is a simple web application that lets you save the precious readable content of web pages you like and want to keep forever. It is a self-hosted alternative to Instapaper and Wallabag with a modern interface and powerful features for managing your bookmarks and reading list.
-  # Brief tagline for the application
   tagline:
     en_us: Self-hosted bookmark manager and read-it-later app
-  # Developer's information
   developer: readeck
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/readeck.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Read this before installing: https://community.bigbeartechworld.com/t/added-readeck-to-bigbearcasaos/5079#p-7723-documentation-3
-  # Title for the application
   title:
     en_us: Readeck
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8000"
+  port_map: '12138'
+

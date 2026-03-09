@@ -1,56 +1,42 @@
-# Configuration for photoprism setup
-
-# Name of the big-bear-photoprism application
 name: big-bear-photoprism
-# Service definitions for the big-bear-photoprism application
 services:
-  # Service name: app
-  # The `app` service definition
   app:
-    # Name of the container
     container_name: big-bear-photoprism
-    # Image to be used for the container
     image: photoprism/photoprism:240915
     environment:
       PHOTOPRISM_ADMIN_PASSWORD: casaos
-      PHOTOPRISM_SITE_URL: "http://locahost/"
-      PHOTOPRISM_ORIGINALS_LIMIT: "5000"
-      PHOTOPRISM_HTTP_COMPRESSION: "gzip"
-      PHOTOPRISM_LOG_LEVEL: "info"
-      PHOTOPRISM_PUBLIC: "false"
-      PHOTOPRISM_READONLY: "false"
-      PHOTOPRISM_EXPERIMENTAL: "false"
-      PHOTOPRISM_DISABLE_CHOWN: "false"
-      PHOTOPRISM_DISABLE_WEBDAV: "false"
-      PHOTOPRISM_DISABLE_SETTINGS: "false"
-      PHOTOPRISM_DISABLE_TENSORFLOW: "false"
-      PHOTOPRISM_DISABLE_FACES: "false"
-      PHOTOPRISM_DISABLE_CLASSIFICATION: "false"
-      PHOTOPRISM_DISABLE_RAW: "false"
-      PHOTOPRISM_RAW_PRESETS: "false"
-      PHOTOPRISM_JPEG_QUALITY: "85"
-      PHOTOPRISM_DETECT_NSFW: "false"
-      PHOTOPRISM_UPLOAD_NSFW: "true"
-      PHOTOPRISM_DATABASE_DRIVER: "mysql"
-      PHOTOPRISM_DATABASE_SERVER: "big-bear-photoprism-db:3306"
-      PHOTOPRISM_DATABASE_NAME: "photoprism"
-      PHOTOPRISM_DATABASE_USER: "photoprism"
-      PHOTOPRISM_DATABASE_PASSWORD: "casaos"
-      PHOTOPRISM_SITE_CAPTION: "AI-Powered Photos App"
-    # Container restart policy: restart the container unless it was stopped manually
+      PHOTOPRISM_SITE_URL: http://locahost/
+      PHOTOPRISM_ORIGINALS_LIMIT: '5000'
+      PHOTOPRISM_HTTP_COMPRESSION: gzip
+      PHOTOPRISM_LOG_LEVEL: info
+      PHOTOPRISM_PUBLIC: 'false'
+      PHOTOPRISM_READONLY: 'false'
+      PHOTOPRISM_EXPERIMENTAL: 'false'
+      PHOTOPRISM_DISABLE_CHOWN: 'false'
+      PHOTOPRISM_DISABLE_WEBDAV: 'false'
+      PHOTOPRISM_DISABLE_SETTINGS: 'false'
+      PHOTOPRISM_DISABLE_TENSORFLOW: 'false'
+      PHOTOPRISM_DISABLE_FACES: 'false'
+      PHOTOPRISM_DISABLE_CLASSIFICATION: 'false'
+      PHOTOPRISM_DISABLE_RAW: 'false'
+      PHOTOPRISM_RAW_PRESETS: 'false'
+      PHOTOPRISM_JPEG_QUALITY: '85'
+      PHOTOPRISM_DETECT_NSFW: 'false'
+      PHOTOPRISM_UPLOAD_NSFW: 'true'
+      PHOTOPRISM_DATABASE_DRIVER: mysql
+      PHOTOPRISM_DATABASE_SERVER: big-bear-photoprism-db:3306
+      PHOTOPRISM_DATABASE_NAME: photoprism
+      PHOTOPRISM_DATABASE_USER: photoprism
+      PHOTOPRISM_DATABASE_PASSWORD: casaos
+      PHOTOPRISM_SITE_CAPTION: AI-Powered Photos App
     restart: unless-stopped
-    # File system volumes to be mounted to the container
     volumes:
-      # Mount points for originals and storage
-      - "/DATA/AppData/$AppID/originals:/photoprism/originals"
-      - "/DATA/AppData/$AppID/storage:/photoprism/storage"
-    # Network ports mapping between the host and the container
+      - /media/Safe-Storage/Library/Photos:/photoprism/originals
+      - /media/Safe-Storage/Library/Photos:/photoprism/storage
     ports:
-      - "2342:2342" # Map host port 2342 to container port 2342
-    # Networks to be attached to the container
+      - '2342:2342'
     networks:
       - photoprism-network
-    # Other services that this service depends on
     depends_on:
       - photoprism-db
     x-casaos:
@@ -138,28 +124,29 @@ services:
           description:
             en_us: 'Container Path: /photoprism/storage'
       ports:
-        - container: "2342"
+        - container: '2342'
           description:
             en_us: 'Container Port: 2342'
-  # Database service for Photoprism
   photoprism-db:
-    # Docker image for the database
     image: mariadb:10.8
-    # Restart policy for the database container
     restart: unless-stopped
-    # Container name for the database
     container_name: big-bear-photoprism-db
-    # Command and options for the database service
-    command: ["mysqld", "--innodb-buffer-pool-size=128M", "--transaction-isolation=READ-COMMITTED", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--max-connections=512", "--innodb-rollback-on-timeout=OFF", "--innodb-lock-wait-timeout=120"] # File system volumes for the database
+    command:
+      - mysqld
+      - '--innodb-buffer-pool-size=128M'
+      - '--transaction-isolation=READ-COMMITTED'
+      - '--character-set-server=utf8mb4'
+      - '--collation-server=utf8mb4_unicode_ci'
+      - '--max-connections=512'
+      - '--innodb-rollback-on-timeout=OFF'
+      - '--innodb-lock-wait-timeout=120'
     volumes:
-      - "/DATA/AppData/$AppID/mysql:/var/lib/mysql"
-    # Environment variables for the MariaDB
+      - /DATA/.docker/AppData/$AppID/mysql:/var/lib/mysql
     environment:
-      MARIADB_DATABASE: "photoprism"
-      MARIADB_USER: "photoprism"
-      MARIADB_PASSWORD: "casaos"
-      MARIADB_ROOT_PASSWORD: "casaos"
-    # Network configurations for the database
+      MARIADB_DATABASE: photoprism
+      MARIADB_USER: photoprism
+      MARIADB_PASSWORD: casaos
+      MARIADB_ROOT_PASSWORD: casaos
     networks:
       - photoprism-network
     x-casaos:
@@ -180,37 +167,24 @@ services:
         - container: /var/lib/mysql
           description:
             en_us: 'Container Path: /var/lib/mysql'
-# Define the networks section
 networks:
-  # Define the photoprism-network
   photoprism-network:
-    # Set the driver to bridge
     driver: bridge
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: PhotoPrism® is an AI-Powered Photos App for the Decentralized Web. It makes use of the latest technologies to tag and find pictures automatically without getting in your way. You can run it at home, on a private server, or in the cloud.
-  # Brief tagline for the application
   tagline:
     en_us: AI-Powered Photos App
-  # Developer's information
   developer: photoprism.app
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/photoprism.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Photoprism
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "2342"
+  port_map: '2342'
+

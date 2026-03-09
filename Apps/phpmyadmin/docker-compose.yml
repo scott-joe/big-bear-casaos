@@ -1,28 +1,15 @@
-# Configuration for phpmyadmin setup
-
-# Name of the big-bear-phpmyadmin application
 name: big-bear-phpmyadmin
-# Service definitions for the big-bear-phpmyadmin application
 services:
-  # Service name: phpmyadmin
   phpmyadmin:
-    # Docker image to be used for this service
     image: phpmyadmin/phpmyadmin:5.2.3
-    # Name of the container once it's up and running
     container_name: big-bear-phpmyadmin
-    # Environment variables passed to the service
     environment:
-      # Host of the database server
-      PMA_HOST: "[YOUR-CASAOS-IP]"
-      # Port of the database server
-      PMA_PORT: "3306"
-      # Username to connect to the database
-      PMA_USER: "bigbear"
-      # Password to connect to the database
-      PMA_PASSWORD: "password"
-    # Port mapping: map host's port 8080 to container's port 80
+      PMA_HOST: '[YOUR-CASAOS-IP]'
+      PMA_PORT: '3306'
+      PMA_USER: bigbear
+      PMA_PASSWORD: password
     ports:
-      - "8080:80"
+      - '12104:80'
     x-casaos:
       envs:
         - container: PMA_HOST
@@ -38,34 +25,24 @@ services:
           description:
             en_us: 'Container Variable: PMA_PASSWORD'
       ports:
-        - container: "80"
+        - container: '80'
           description:
             en_us: 'Container Port: 80'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: phpmyadmin
-  # Detailed description for the application
   description:
     en_us: phpMyAdmin - A web interface for MySQL and MariaDB.
-  # Brief tagline for the application
   tagline:
     en_us: phpMyAdmin
-  # Developer's information
   developer: phpMyAdmin
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/phpmyadmin.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: phpMyAdmin
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8080"
+  port_map: '12104'
+

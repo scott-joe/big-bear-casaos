@@ -1,29 +1,14 @@
-# Configuration for big-bear-umbrel setup
-
-# Name of the big-bear-umbrel application
 name: big-bear-umbrel
-# Service definitions for the big-bear-umbrel application
 services:
-  # Service name: big-bear-umbrel
-  # The `big-bear-umbrel` service definition
   big-bear-umbrel:
-    # Name of the container
     container_name: big-bear-umbrel
-    # Image to be used for the container
     image: dockurr/umbrel:1.4.0
-    # Container restart policy
     restart: unless-stopped
-    # Ports mapping between host and container
     ports:
-      # Mapping port 8080 of the host to port 80 of the container
-      - "8080:80"
-    # Volumes to be mounted to the container
+      - '12161:80'
     volumes:
-      # Mounting the local /DATA/AppData/$AppID directory to /data inside the container
-      - /DATA/AppData/$AppID/data:/data
-      # Mounting docker.sock to allow docker management via Umbrel
+      - /DATA/.docker/AppData/$AppID/data:/data
       - /var/run/docker.sock:/var/run/docker.sock
-    # Stop grace period for the container
     stop_grace_period: 1m
     x-casaos:
       volumes:
@@ -34,39 +19,28 @@ services:
           description:
             en_us: 'Container Path: /var/run/docker.sock'
       ports:
-        - container: "80"
+        - container: '80'
           description:
             en_us: 'Container Port: 80'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-umbrel
-  # Detailed description for the application
   description:
     en_us: Umbrel is a personal server OS that makes self-hosting accessible to everyone.
-  # Brief tagline for the application
   tagline:
     en_us: Umbrel OS
-  # Developer's information
   developer: dockurr
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/umbrelos.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Before you install read this: https://community.bigbeartechworld.com/t/added-umbrelos-to-bigbearcasaos/2249
-  # Title for the application
   title:
     en_us: Umbrel OS
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8080"
+  port_map: '12161'
+

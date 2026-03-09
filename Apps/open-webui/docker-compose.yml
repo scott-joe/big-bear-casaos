@@ -1,29 +1,16 @@
-# Configuration for open-webui setup
-
-# Name of the big-bear-open-webui application
 name: big-bear-open-webui
-# Service definitions for the big-bear-open-webui application
 services:
-  # Service name: big-bear-open-webui
-  # The `big-bear-open-webui` service definition
   big-bear-open-webui:
-    # Name of the container
     container_name: big-bear-open-webui
-    # Image to be used for the container
     image: ghcr.io/open-webui/open-webui:git-33e54a9
-    # Container restart policy
     restart: unless-stopped
-    # Volumes to be mounted to the container
     volumes:
-      - /DATA/AppData/$AppID/data:/app/backend/data
-    # Environment variables
+      - /DATA/.docker/AppData/$AppID/data:/app/backend/data
     environment:
       - OLLAMA_BASE_URL=
       - OPENAI_API_KEY=
-    # Ports mapping between host and container
     ports:
-      # Mapping port 8080 of the host to port 8080 of the container
-      - "8080:8080"
+      - '12095:8080'
     x-casaos:
       envs:
         - container: OLLAMA_BASE_URL
@@ -37,39 +24,28 @@ services:
           description:
             en_us: 'Container Path: /app/backend/data'
       ports:
-        - container: "8080"
+        - container: '8080'
           description:
             en_us: 'Container Port: 8080'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-open-webui
-  # Detailed description for the application
   description:
     en_us: Open WebUI is an extensible, feature-rich, and user-friendly self-hosted WebUI designed to operate entirely offline.
-  # Brief tagline for the application
   tagline:
     en_us: User-friendly WebUI for LLMs
-  # Developer's information
   developer: open-webui
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/open-webui.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Read this before installing: https://community.bigbeartechworld.com/t/added-open-webui-to-bigbearcasaos/1263#p-2265-documentation-3
-  # Title for the application
   title:
     en_us: Open WebUI
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8080"
+  port_map: '12095'
+

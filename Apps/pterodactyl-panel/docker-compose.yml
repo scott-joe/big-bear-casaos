@@ -1,52 +1,40 @@
-# big-bear-pterodactyl-panel configuration
 name: big-bear-pterodactyl-panel
-# Services section that specifies how the different services should be run
 services:
-  # This is the main app service for Pterodactyl Panel
   app:
-    # Container configuration for the Pterodactyl Panel
     container_name: pterodactyl-panel
-    # Image to use for the panel
     image: ghcr.io/pterodactyl/panel:v1.12.1
-    # Restart the container automatically if it stops
     restart: always
-    # Ports mapping: [HOST:CONTAINER]
     ports:
-      - "1180:80" # Map host port 1180 to container port 80
-      - "11443:443" # Map host port 11443 to container port 443
-    # Link this container with the 'database' and 'cache' containers
+      - '1180:80'
+      - '11443:443'
     links:
       - database
       - cache
-    # Volumes mapping: [HOST:CONTAINER]
     volumes:
-      - "/DATA/AppData/$AppID/var/:/app/var/" # Map app data
-      - "/DATA/AppData/$AppID/nginx/:/etc/nginx/http.d/" # Map nginx config
-      - "/DATA/AppData/$AppID/certs/:/etc/letsencrypt/" # Map SSL certificates
-      - "/DATA/AppData/$AppID/logs/:/app/storage/logs" # Map logs
-    # Environment variables for the container
+      - /DATA/.docker/AppData/$AppID/var/:/app/var/
+      - /DATA/.docker/AppData/$AppID/nginx/:/etc/nginx/http.d/
+      - /DATA/.docker/AppData/$AppID/certs/:/etc/letsencrypt/
+      - /DATA/.docker/AppData/$AppID/logs/:/app/storage/logs
     environment:
-      APP_URL: "http://example.com" # App URL
-      APP_TIMEZONE: "UTC" # App timezone
-      APP_SERVICE_AUTHOR: "noreply@example.com" # Service author email
-      # Uncomment to use Let's Encrypt for SSL certificate
-      # LE_EMAIL: ""
-      MAIL_FROM: "noreply@example.com" # Email sender
-      MAIL_DRIVER: "smtp" # Email driver
-      MAIL_HOST: "mail" # Email host
-      MAIL_PORT: "1025" # Email port
-      MAIL_USERNAME: "" # Email username
-      MAIL_PASSWORD: "" # Email password
-      MAIL_ENCRYPTION: "true" # Use email encryption
-      APP_ENV: "production" # App environment
-      APP_ENVIRONMENT_ONLY: "false" # Environment setting
-      CACHE_DRIVER: "redis" # Cache driver
-      SESSION_DRIVER: "redis" # Session driver
-      QUEUE_DRIVER: "redis" # Queue driver
-      REDIS_HOST: "cache" # Redis host
-      DB_HOST: "database" # Database host
-      DB_PASSWORD: casaos # Database password
-      DB_PORT: "3306" # Database port
+      APP_URL: http://example.com
+      APP_TIMEZONE: UTC
+      APP_SERVICE_AUTHOR: noreply@example.com
+      MAIL_FROM: noreply@example.com
+      MAIL_DRIVER: smtp
+      MAIL_HOST: mail
+      MAIL_PORT: '1025'
+      MAIL_USERNAME: ''
+      MAIL_PASSWORD: ''
+      MAIL_ENCRYPTION: 'true'
+      APP_ENV: production
+      APP_ENVIRONMENT_ONLY: 'false'
+      CACHE_DRIVER: redis
+      SESSION_DRIVER: redis
+      QUEUE_DRIVER: redis
+      REDIS_HOST: cache
+      DB_HOST: database
+      DB_PASSWORD: casaos
+      DB_PORT: '3306'
     x-casaos:
       envs:
         - container: APP_URL
@@ -120,29 +108,23 @@ services:
           description:
             en_us: 'Container Path: /app/storage/logs'
       ports:
-        - container: "80"
+        - container: '80'
           description:
             en_us: 'Container Port: 80'
-        - container: "443"
+        - container: '443'
           description:
             en_us: 'Container Port: 443'
   database:
-    # Image to use for the database
     image: mariadb:10.5
-    # Restart the container automatically if it stops
     restart: always
-    # Command to run on container start
-    command: --default-authentication-plugin=mysql_native_password
-    # Volumes mapping: [HOST:CONTAINER]
+    command: '--default-authentication-plugin=mysql_native_password'
     volumes:
-      - "/DATA/AppData/$AppID/database:/var/lib/mysql" # Map database data
-    # Environment variables for the container
+      - /DATA/.docker/AppData/$AppID/database:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: "panel" # Database name
-      MYSQL_USER: "pterodactyl" # Database user
-      MYSQL_PASSWORD: "casaos" # Database user password
-      MYSQL_ROOT_PASSWORD: "casaos" # Database root password
-      # Container configuration for the cache
+      MYSQL_DATABASE: panel
+      MYSQL_USER: pterodactyl
+      MYSQL_PASSWORD: casaos
+      MYSQL_ROOT_PASSWORD: casaos
     x-casaos:
       envs:
         - container: MYSQL_DATABASE
@@ -162,42 +144,29 @@ services:
           description:
             en_us: 'Container Path: /var/lib/mysql'
   cache:
-    # Image to use for the cache
     image: redis:8.2.2-alpine@sha256:1c78f5e7512cc8b22b0edc95c20e7abd9e1fd832e5dfd5c3c6b59ce82fb238d0
-    # Restart the container automatically if it stops
     restart: always
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: Pterodactyl® is a free, open-source game server management panel built with PHP, React, and Go. Designed with security in mind, Pterodactyl runs all game servers in isolated Docker containers while exposing a beautiful and intuitive UI to end users.
-  # Brief tagline for the application
   tagline:
     en_us: Pterodactyl Panel
-  # Developer's information
   developer: pterodactyl
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/pterodactyl.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Before you can use Pterodactyl Panel, you need to read the installation guide.
 
         [Install Guide Link](https://github.com/bigbeartechworld/big-bear-casaos/tree/master/Apps/pterodactyl-panel)
-  # Title for the application
   title:
     en_us: Pterodactyl Panel
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "1180"
+  port_map: '1180'
+

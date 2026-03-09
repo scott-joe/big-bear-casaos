@@ -1,59 +1,37 @@
-# Configuration for beszel setup
-
-# Name of the big-bear-beszel application
 name: big-bear-beszel
-# Service definitions for the big-bear-beszel application
 services:
-  # Service name: big-bear-beszel
-  # The `big-bear-beszel` service definition
   big-bear-beszel:
-    # Name of the container
     container_name: big-bear-beszel
-    # Image to be used for the container
     image: henrygd/beszel:0.18.4
-    # Container restart policy
     restart: unless-stopped
-    # Volumes to be mounted to the container
     volumes:
-      - /DATA/AppData/$AppID/data:/beszel_data
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/data:/beszel_data
     ports:
-      # Mapping port 8090 of the host to port 8090 of the container
-      - "8090:8090"
+      - '12007:8090'
     x-casaos:
       volumes:
         - container: /beszel_data
           description:
             en_us: 'Container Path: /beszel_data'
       ports:
-        - container: "8090"
+        - container: '8090'
           description:
             en_us: 'Container Port: 8090'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-beszel
-  # Detailed description for the application
   description:
     en_us: A lightweight server resource monitoring hub with historical data, docker stats, and alerts.
-  # Brief tagline for the application
   tagline:
     en_us: Server Monitoring Hub
-  # Developer's information
   developer: henrygd
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps/apps/beszel/logo.jpg
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Beszel
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8090"
+  port_map: '12007'
+

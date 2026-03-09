@@ -1,29 +1,20 @@
-# Configuration for big-bear-dashy setup
-
-# Name of the big-bear-dashy application
 name: big-bear-dashy
-# Service definitions for the dashy application
 services:
-  # Service name: big-bear-dashy
   big-bear-dashy:
-    # Image to be used for the app service
     image: lissy93/dashy:3.1.0
-    # Name of the container
     container_name: big-bear-dashy
-    # Uncomment below if you want to mount volumes
     volumes:
-      - /DATA/AppData/$AppID/public:/app/public
-    # Ports mapping
+      - /DATA/.docker/AppData/$AppID/public:/app/public
     ports:
-      - 4000:8080
-    # Set any environmental variables
+      - '4000:8080'
     environment:
       - NODE_ENV=production
-    # Restart policy for the container
     restart: unless-stopped
-    # Configure healthchecks for the service
     healthcheck:
-      test: ["CMD", "node", "/app/services/healthcheck"]
+      test:
+        - CMD
+        - node
+        - /app/services/healthcheck
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -38,34 +29,24 @@ services:
           description:
             en_us: 'Container Path: /app/public'
       ports:
-        - container: "8080"
+        - container: '8080'
           description:
             en_us: 'Container Port: 8080'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-dashy
-  # Detailed description for the application
   description:
     en_us: Dashy helps you organize your self-hosted services by making them accessible from a single place
-  # Brief tagline for the application
   tagline:
     en_us: Dashy
-  # Developer's information
   developer: Lissy93
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/dashy.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Dashy
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "4000"
+  port_map: '4000'
+

@@ -1,57 +1,41 @@
-# Configuration for appsmith setup
-
-# Name of the big-bear-appsmith application
 name: big-bear-appsmith
-# Service definitions for the big-bear-appsmith application
 services:
-  # Service name: app
-  # The `app` service definition
   app:
-    image: appsmith/appsmith-ce:v1.73.1 # Docker image to use
-    container_name: appsmith # Name of the container
+    image: appsmith/appsmith-ce:v1.73.1
+    container_name: appsmith
     ports:
-      - "1080:80" # Port mapping host:container for HTTP
-      - "10443:443" # Port mapping host:container for HTTPS
+      - '12003:80'
+      - '12004:443'
     volumes:
-      - /DATA/AppData/$AppID/stacks:/appsmith-stacks # Mount volume for app data
-    restart: unless-stopped # Container restart policy
+      - /DATA/.docker/AppData/$AppID/stacks:/appsmith-stacks
+    restart: unless-stopped
     x-casaos:
       volumes:
         - container: /appsmith-stacks
           description:
             en_us: 'Container Path: /appsmith-stacks'
       ports:
-        - container: "80"
+        - container: '80'
           description:
             en_us: 'Container Port: 80'
-        - container: "443"
+        - container: '443'
           description:
             en_us: 'Container Port: 443'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: Low code project to build admin panels, internal tools, and dashboards, integrating 15+ databases.
-  # Brief tagline for the application
   tagline:
     en_us: Appsmith
-  # Developer's information
   developer: appsmithorg
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/appsmithorg/appsmith/static/logo.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Appsmith
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "1080"
+  port_map: '12003'
+

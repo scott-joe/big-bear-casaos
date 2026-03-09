@@ -1,31 +1,19 @@
-# Configuration for genmon setup
-
-# Name of the big-bear-genmon application
 name: big-bear-genmon
-# Service definitions for the big-bear-genmon application
 services:
-  # Service name: big-bear-genmon
-  # The `big-bear-genmon` service definition
   big-bear-genmon:
-    # Name of the container
     container_name: big-bear-genmon
-    # Image to be used for the container
     image: bigbeartechworld/big-bear-genmon:1.19.08
-    # Environment variables to set inside the container
     environment:
-      - TZ=America/Chicago # Set the timezone to 'America/Chicago'
-    # Ports to expose, mapping the host port to the container port
+      - TZ=America/Chicago
     ports:
-      - "20022:22" # Map TCP port 22 in the container to port 20022 on the host
-      - "38443:443" # Map TCP port 443 in the container to port 38443 on the host
-      - "8000:8000" # Map TCP port 8000 in the container to port 8000 on the host
-    # Define the restart policy for the service container
-    restart: unless-stopped # Restart the container unless it is explicitly stopped
-    # Mount host paths or named volumes into the container
+      - '20022:22'
+      - '38443:443'
+      - '12037:8000'
+    restart: unless-stopped
     volumes:
-      - /DATA/AppData/$AppID/git/genmon:/git/genmon # Mount a named volume 'big_bear_genmon_data' to store data persistently at /git/genmon in the container (this is the default location)
-      - /DATA/AppData/$AppID/etc/genmon:/etc/genmon # Mount a named volume 'big_bear_genmon_config' to store configuration files persistently at /etc/genmon in the container
-      - /DATA/AppData/$AppID/var/log:/var/log # Mount a named volume 'big_bear_genmon_logs' to store logs persistently at /var/log in the container
+      - /DATA/.docker/AppData/$AppID/git/genmon:/git/genmon
+      - /DATA/.docker/AppData/$AppID/etc/genmon:/etc/genmon
+      - /DATA/.docker/AppData/$AppID/var/log:/var/log
     x-casaos:
       envs:
         - container: TZ
@@ -42,43 +30,32 @@ services:
           description:
             en_us: 'Container Path: /var/log'
       ports:
-        - container: "22"
+        - container: '22'
           description:
             en_us: 'Container Port: 22'
-        - container: "443"
+        - container: '443'
           description:
             en_us: 'Container Port: 443'
-        - container: "8000"
+        - container: '8000'
           description:
             en_us: 'Container Port: 8000'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-genmon
-  # Detailed description for the application
   description:
     en_us: Generac (and other models) Generator Monitoring using a Raspberry Pi and WiFi
-  # Screenshot links for the application
   screenshot_link:
     - https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps@main/apps/genmon/screenshots/screenshot1.png
-  # Brief tagline for the application
   tagline:
     en_us: Genmon
-  # Developer's information
   developer: bigbeartechworld
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps/apps/genmon/logo.jpeg
-  # Thumbnail image for the application (if any)
   thumbnail: https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps/apps/genmon/screenshot1.png
-  # Title for the application
   title:
     en_us: Genmon
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8000"
+  port_map: '20022'
+

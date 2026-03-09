@@ -1,30 +1,16 @@
-# Configuration for ollama-amd setup
-
-# Name of the big-bear-ollama-amd application
 name: big-bear-ollama-amd
-# Service definitions for the big-bear-ollama-amd application
 services:
-  # Service name: big-bear-ollama-amd
-  # The `big-bear-ollama-amd` service definition
   big-bear-ollama-amd:
-    # Name of the container
     container_name: big-bear-ollama-amd
-    # Image to be used for the container
     image: ollama/ollama:0.17.6-rocm
-    # Container restart policy
     restart: unless-stopped
-    # Environment variables
     environment:
       - PORT=11434
-    # Volumes to be mounted to the container
     volumes:
-      - /DATA/AppData/$AppID/.ollama:/root/.ollama
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/.ollama:/root/.ollama
     ports:
-      # Mapping port 11434 of the host to port 11434 of the container
-      - "11434:11434"
+      - '11434:11434'
     devices:
-      # Attach GPU
       - /dev/kfd
       - /dev/dri
     x-casaos:
@@ -37,34 +23,24 @@ services:
           description:
             en_us: 'Container Path: /root/.ollama'
       ports:
-        - container: "11434"
+        - container: '11434'
           description:
             en_us: 'Container Port: 11434'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-ollama-amd
-  # Detailed description for the application
   description:
     en_us: Get up and running with Llama 3, Mistral, Gemma, and other large language models.
-  # Brief tagline for the application
   tagline:
     en_us: LLMs inference server with OpenAI compatible API
-  # Developer's information
   developer: ollama
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/ollama.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Ollama - AMD
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "11434"
+  port_map: '11434'
+

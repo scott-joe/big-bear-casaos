@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4.3.0
+        with:
+          fetch-depth: 0
 
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -40,6 +42,27 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+      - name: Resolve diff range
+        id: diff-range
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "base_sha=${{ github.event.pull_request.base.sha }}" >> $GITHUB_OUTPUT
+            echo "head_sha=${{ github.event.pull_request.head.sha }}" >> $GITHUB_OUTPUT
+          else
+            echo "base_sha=${{ github.event.before }}" >> $GITHUB_OUTPUT
+            echo "head_sha=${{ github.sha }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check credential policy (changed files)
+        run: |
+          pnpm run check:credential-policy -- --base-sha "${{ steps.diff-range.outputs.base_sha }}" --head-sha "${{ steps.diff-range.outputs.head_sha }}"
+
+      - name: Check sensitive content (changed files)
+        run: |
+          pnpm run check:sensitive-content -- --base-sha "${{ steps.diff-range.outputs.base_sha }}" --head-sha "${{ steps.diff-range.outputs.head_sha }}"
+      - name: Check manifest policy (full registry)
+        run: |
+          pnpm run check:manifest-policy
 
       - name: Run global tests
         run: pnpm test

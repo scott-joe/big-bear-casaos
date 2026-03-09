@@ -1,19 +1,17 @@
-# Configuration for big-bear-onlyoffice setup
 name: big-bear-onlyoffice
-# Service definitions for the big-bear-onlyoffice application
 services:
   app:
     image: onlyoffice/documentserver:9.1.0
     container_name: documentserver
     ports:
-      - "7400:80"
+      - '7400:80'
     volumes:
-      - /DATA/AppData/$AppID/onlyoffice/logs:/var/log/onlyoffice
-      - /DATA/AppData/$AppID/onlyoffice/data:/var/www/onlyoffice/Data
-      - /DATA/AppData/$AppID/onlyoffice/lib:/var/lib/onlyoffice
-      - /DATA/AppData/$AppID/onlyoffice/rabbitmq:/var/lib/rabbitmq
-      - /DATA/AppData/$AppID/onlyoffice/redis:/var/lib/redis
-      - /DATA/AppData/$AppID/onlyoffice/db:/var/lib/postgresql
+      - /DATA/.docker/AppData/$AppID/onlyoffice/logs:/var/log/onlyoffice
+      - /DATA/.docker/AppData/$AppID/onlyoffice/data:/var/www/onlyoffice/Data
+      - /DATA/.docker/AppData/$AppID/onlyoffice/lib:/var/lib/onlyoffice
+      - /DATA/.docker/AppData/$AppID/onlyoffice/rabbitmq:/var/lib/rabbitmq
+      - /DATA/.docker/AppData/$AppID/onlyoffice/redis:/var/lib/redis
+      - /DATA/.docker/AppData/$AppID/onlyoffice/db:/var/lib/postgresql
     x-casaos:
       volumes:
         - container: /var/log/onlyoffice
@@ -35,34 +33,24 @@ services:
           description:
             en_us: 'Container Path: /var/lib/postgresql'
       ports:
-        - container: "80"
+        - container: '80'
           description:
             en_us: 'Container Port: 80'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: Feature-rich web-based office suite with a vast range of collaborative capabilities
-  # Brief tagline for the application
   tagline:
     en_us: OnlyOffice
-  # Developer's information
   developer: onlyoffice
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/onlyoffice.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: OnlyOffice
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "7400"
+  port_map: '7400'
+

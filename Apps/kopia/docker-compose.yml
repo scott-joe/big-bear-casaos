@@ -1,42 +1,29 @@
-# Configuration for kopia setup
-
-# Name of the big-bear-kopia application
 name: big-bear-kopia
-# Service definitions for the big-bear-kopia application
 services:
-  # Service name: big-bear-kopia
-  # The `big-bear-kopia` service definition
   big-bear-kopia:
-    # Name of the container
     container_name: big-bear-kopia
-    # Image to be used for the container
     image: ghcr.io/thespad/kopia-server:v0.17.0-spad3
-    # Container restart policy
     restart: unless-stopped
-    # Environment variables for the container
     environment:
       - PUID=0
       - PGID=0
       - TZ=UTC
-      - KOPIA_HTTPS=true # Optional
+      - KOPIA_HTTPS=true
       - KOPIA_UI_USERNAME=casaos
       - KOPIA_UI_PASSWORD=casaos
-      - KOPIA_PASSWORD=casaos # Repository password
-      - REFRESH_INTERVAL= # Optional
+      - KOPIA_PASSWORD=casaos
+      - REFRESH_INTERVAL=
     volumes:
-      - /DATA/AppData/$AppID/config:/config
-      - /DATA/AppData/$AppID/home:/backups/home # Optional
-      - /var/lib/docker/volumes:/backups/docker:ro # Optional
-      - /DATA/AppData/$AppID/repository:/repository # Optional
-      - /tmp:/tmp:shared # Optional
-      - /var/run/docker.sock:/var/run/docker.sock:ro # Optional
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/config:/config
+      - /DATA/.docker/AppData/$AppID/home:/backups/home
+      - /var/lib/docker/volumes:/backups/docker:ro
+      - /DATA/.docker/AppData/$AppID/repository:/repository
+      - /tmp:/tmp:shared
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
-      # Mapping port 51515 of the host to port 51515 of the container
-      - "51515:51515"
-    # Additional capabilities to be added to the container
+      - '51515:51515'
     cap_add:
-      - SYS_ADMIN # Optional
+      - SYS_ADMIN
     x-casaos:
       envs:
         - container: PUID
@@ -83,34 +70,24 @@ services:
           description:
             en_us: 'Container Path: /var/run/docker.sock'
       ports:
-        - container: "51515"
+        - container: '51515'
           description:
             en_us: 'Container Port: 51515'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-kopia
-  # Detailed description for the application
   description:
     en_us: Kopia is a fast and secure open-source backup/restore tool that allows you to create encrypted snapshots of your data and save the snapshots to remote or cloud storage of your choice, to network-attached storage or server, or locally on your machine.
-  # Brief tagline for the application
   tagline:
     en_us: Kopia
-  # Developer's information
   developer: thespad
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/kopia.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Kopia
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "51515"
+  port_map: '51515'
+

@@ -1,17 +1,8 @@
-# Configuration for komf setup
-
-# Name of the big-bear-komf application
 name: big-bear-komf
-# Service definitions for the big-bear-homarr application
 services:
-  # Service name: big-bear-komf
-  # The `big-bear-komf` service definition
   big-bear-komf:
-    # Name of the container
     container_name: big-bear-komf
-    # Image to be used for the container
     image: sndxr/komf:1.7.1
-    # Container restart policy
     restart: unless-stopped
     environment:
       - KOMF_KOMGA_BASE_URI=http://komga:25600
@@ -20,19 +11,11 @@ services:
       - KOMF_KAVITA_BASE_URI=http://kavita:5000
       - KOMF_KAVITA_API_KEY=cd1edcc1-6010-41a8-a82b-73f501dc2760
       - KOMF_LOG_LEVEL=INFO
-      # optional jvm options. Example config for low memory usage. Runs guaranteed cleanup up every 3600000ms(1hour)
-      # - JAVA_TOOL_OPTIONS=-XX:+UnlockExperimentalVMOptions -XX:+UseShenandoahGC -XX:ShenandoahGCHeuristics=compact -XX:ShenandoahGuaranteedGCInterval=3600000 -XX:TrimNativeHeapInterval=3600000
-    # Volumes to be mounted to the container
     volumes:
-      # Mounting the local /config directory to /config inside the container
-      - /DATA/AppData/$AppID/config:/config
-    # User to run the container as
-    user: "1000:1000"
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/config:/config
+    user: '1000:1000'
     ports:
-      # Mapping port 8080 of the host to port 8080 of the container
-      - "8085:8085"
-    # Networks to be attached to the container
+      - '12061:8085'
     networks:
       - big_bear_komf_network
     x-casaos:
@@ -60,43 +43,31 @@ services:
           description:
             en_us: 'Container Path: /config'
       ports:
-        - container: "8085"
+        - container: '8085'
           description:
             en_us: 'Container Port: 8085'
-# Network definitions for the big-bear-komf application
 networks:
   big_bear_komf_network:
     driver: bridge
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-komf
-  # Detailed description for the application
   description:
     en_us: Komga and Kavita Metadata Fetcher is a tool that fetches metadata and thumbnails for your digital comic book library. It can automatically pick up added series and update their metadata and thumbnail. You can also manually search and identify series, or match the entire library or a series. Additionally, you can install the Komf userscript to add Komf integration directly to Komga and Kavita UI, allowing you to launch manual or automatic metadata identification.
-  # Brief tagline for the application
   tagline:
     en_us: Komga and Kavita Metadata Fetcher
-  # Developer's information
   developer: sndxr
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/komga.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Read this before installing: https://community.bigbeartechworld.com/t/added-komf-to-bigbearcasaos/1951#p-3619-documentation-4
-  # Title for the application
   title:
     en_us: Komf
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8085"
+  port_map: '12061'
+

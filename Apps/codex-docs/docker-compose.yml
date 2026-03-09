@@ -1,15 +1,13 @@
-# Configuration for big-bear-codex-docs setup
 name: big-bear-codex-docs
-# Service definitions for the big-bear-codex-docs application
 services:
   app:
     image: ghcr.io/codex-team/codex.docs:v2.2
     ports:
-      - "3000:3000"
+      - '12017:3000'
     volumes:
-      - /DATA/AppData/$AppID/uploads:/usr/src/app/uploads
-      - /DATA/AppData/$AppID/db:/usr/src/app/db
-      - /DATA/AppData/$AppID/codex-docs-config.local.yaml:/usr/src/app/docs-config.yaml
+      - /DATA/.docker/AppData/$AppID/uploads:/usr/src/app/uploads
+      - /DATA/.docker/AppData/$AppID/db:/usr/src/app/db
+      - /DATA/.docker/AppData/$AppID/codex-docs-config.local.yaml:/usr/src/app/docs-config.yaml
     x-casaos:
       volumes:
         - container: /usr/src/app/uploads
@@ -22,34 +20,24 @@ services:
           description:
             en_us: 'Container Path: /usr/src/app/docs-config.yaml'
       ports:
-        - container: "3000"
+        - container: '3000'
           description:
             en_us: 'Container Port: 3000'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: CodeX Docs is a free docs application. It's based on Editor.js ecosystem which gives all modern opportunities for working with content.
-  # Brief tagline for the application
   tagline:
     en_us: CodeX Docs
-  # Developer's information
   developer: codex-team
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps/apps/codex-docs/logo.jpg
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: CodeX Docs
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "3000"
+  port_map: '12017'
+

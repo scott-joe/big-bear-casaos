@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "description": "Storage and mount path policy for app manifest rewrites.",
+  "stateData": {
+    "legacyRoot": "/DATA/AppData/$AppID",
+    "targetRoot": "/DATA/.docker/AppData/$AppID"
+  },
+  "dockerRoots": [
+    {
+      "match": "/media/Safe-Storage/docker",
+      "replace": "/media/Safe-Storage/.docker"
+    },
+    {
+      "match": "/DATA/docker",
+      "replace": "/DATA/.docker"
+    }
+  ],
+  "contentLibrary": {
+    "enabled": true,
+    "targetRoot": "/media/Safe-Storage/Library",
+    "defaultMode": "shared-root",
+    "containerPathMappings": {
+      "/tv": "/media/Safe-Storage/Library/TV",
+      "/movies": "/media/Safe-Storage/Library/Movies",
+      "/music": "/media/Safe-Storage/Library/Music",
+      "/books": "/media/Safe-Storage/Library/Books",
+      "/audiobooks": "/media/Safe-Storage/Library/Audiobooks",
+      "/comics": "/media/Safe-Storage/Library/Comics",
+      "/watch": "/media/Safe-Storage/Library/Watch",
+      "/downloads": "/media/Safe-Storage/Library/Downloads",
+      "/srv/downloads": "/media/Safe-Storage/Library/Downloads",
+      "/srv/media": "/media/Safe-Storage/Library",
+      "/romm/library": "/media/Safe-Storage/Library/Games",
+      "/usr/src/paperless/media": "/media/Safe-Storage/Library/Documents",
+      "/opt/recipes/mediafiles": "/media/Safe-Storage/Library/Recipes",
+      "/media/data/syncthing": "/media/Safe-Storage/Library/Sync"
+    },
+    "keywordMappings": [
+      {
+        "keyword": "movie",
+        "target": "/media/Safe-Storage/Library/Movies"
+      },
+      {
+        "keyword": "tv",
+        "target": "/media/Safe-Storage/Library/TV"
+      },
+      {
+        "keyword": "music",
+        "target": "/media/Safe-Storage/Library/Music"
+      },
+      {
+        "keyword": "book",
+        "target": "/media/Safe-Storage/Library/Books"
+      },
+      {
+        "keyword": "audiobook",
+        "target": "/media/Safe-Storage/Library/Audiobooks"
+      },
+      {
+        "keyword": "photo",
+        "target": "/media/Safe-Storage/Library/Photos"
+      },
+      {
+        "keyword": "video",
+        "target": "/media/Safe-Storage/Library/Videos"
+      },
+      {
+        "keyword": "download",
+        "target": "/media/Safe-Storage/Library/Downloads"
+      },
+      {
+        "keyword": "media",
+        "target": "/media/Safe-Storage/Library"
+      },
+      {
+        "keyword": "library",
+        "target": "/media/Safe-Storage/Library"
+      }
+    ]
+  },
+  "systemMountPrefixes": [
+    "/var/run/",
+    "/var/lib/docker/",
+    "/etc/localtime",
+    "/etc/timezone",
+    "/proc",
+    "/sys",
+    "/dev/",
+    "/tmp"
+  ],
+  "appOverrides": {
+    "dockge": {
+      "pathReplacements": [
+        {
+          "match": "/DATA/AppData/big-bear-dockge/stacks",
+          "replace": "/DATA/.docker/AppData/big-bear-dockge/stacks"
+        }
+      ]
+    },
+    "pingvin-share": {
+      "pathReplacements": [
+        {
+          "match": "/DATA/AppData/pingvin-share/data",
+          "replace": "/DATA/.docker/AppData/pingvin-share/data"
+        },
+        {
+          "match": "/DATA/AppData/pingvin-share/images",
+          "replace": "/DATA/.docker/AppData/pingvin-share/images"
+        }
+      ]
+    },
+    "unifi-network-application-mongo-4": {
+      "pathReplacements": [
+        {
+          "match": "/DATA/AppData/big-bear-unifi-network-application/db/init-mongo.js",
+          "replace": "/DATA/.docker/AppData/big-bear-unifi-network-application/db/init-mongo.js"
+        }
+      ]
+    }
+  }
+}

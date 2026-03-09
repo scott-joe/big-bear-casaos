@@ -1,26 +1,16 @@
-# Configuration for big-bear-wordpress setup
-
-# Name of the big-bear-wordpress application
 name: big-bear-wordpress
-# Service definitions for the wordpress application
 services:
-  # Service definition for the main application
   app:
-    # Docker image to use for the application
     image: wordpress:6.9.1
-    # Port mapping for the application
     ports:
-      - 8080:80
-    # Environment variables for the application
+      - '12181:80'
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: casaos
       WORDPRESS_DB_PASSWORD: casaos
       WORDPRESS_DB_NAME: wordpress
-    # Volume mapping for the application
     volumes:
-      - /DATA/AppData/$AppID/html:/var/www/html
-    # Service dependencies for the application
+      - /DATA/.docker/AppData/$AppID/html:/var/www/html
     depends_on:
       - db
     x-casaos:
@@ -42,22 +32,18 @@ services:
           description:
             en_us: 'Container Path: /var/www/html'
       ports:
-        - container: "80"
+        - container: '80'
           description:
             en_us: 'Container Port: 80'
-  # Service definition for the database
   db:
-    # Docker image to use for the database
     image: mysql:5.7
-    # Environment variables for the database
     environment:
       MYSQL_DATABASE: wordpress
       MYSQL_USER: casaos
       MYSQL_PASSWORD: casaos
       MYSQL_ROOT_PASSWORD: casaos
-    # Volume mapping for the database
     volumes:
-      - /DATA/AppData/$AppID/mysql:/var/lib/mysql
+      - /DATA/.docker/AppData/$AppID/mysql:/var/lib/mysql
     x-casaos:
       envs:
         - container: MYSQL_DATABASE
@@ -77,30 +63,20 @@ services:
           description:
             en_us: 'Container Path: /var/lib/mysql'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: Initially started as a blogging tool in 2003, it has evolved into a highly flexible CMS that powers over 40% of the web (as of my last training data in 2022).
-  # Brief tagline for the application
   tagline:
     en_us: WordPress
-  # Developer's information
   developer: Automattic
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/wordpress.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: WordPress
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8080"
+  port_map: '12181'
+

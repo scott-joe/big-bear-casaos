@@ -1,31 +1,16 @@
-# Configuration for uisp setup
-
-# Name of the big-bear-uisp application
 name: big-bear-uisp
-# Service definitions for the big-bear-uisp application
 services:
-  # Service name: big-bear-uisp
-  # The `big-bear-uisp` service definition
   big-bear-uisp:
-    # Name of the container
     container_name: big-bear-uisp
-    # Image to be used for the container
     image: nico640/docker-unms:2.4.155.1
-    # Container restart policy
     restart: unless-stopped
-    # Environment variables for the container
     environment:
       - TZ=UTC
-    # Volumes to be mounted to the container
     volumes:
-      # Mounting the local /DATA/AppData/big-bear-uisp/config directory to /config inside the container
-      - /DATA/AppData/$AppID/config:/config
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/config:/config
     ports:
-      # Mapping port 8080 of the host to port 80 of the container
-      - "8080:80"
-      # Mapping port 10443 of the host to port 443 of the container
-      - "10443:443"
+      - '12158:80'
+      - '12159:443'
     x-casaos:
       envs:
         - container: TZ
@@ -36,42 +21,31 @@ services:
           description:
             en_us: 'Container Path: /config'
       ports:
-        - container: "80"
+        - container: '80'
           description:
             en_us: 'Container Port: 80'
-        - container: "443"
+        - container: '443'
           description:
             en_us: 'Container Port: 443'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-uisp
-  # Detailed description for the application
   description:
     en_us: All-in-one docker image for Ubiquiti UISP (formerly UNMS). Supports x86_64 and ARM (Raspberry Pi).
-  # Brief tagline for the application
   tagline:
     en_us: UISP
-  # Developer's information
   developer: nico640
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-icons/Apps/uisp/logo.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Before you install read this: https://community.bigbeartechworld.com/t/added-uisp-to-bigbearcasaos/2582#p-4674-documentation-3
-  # Title for the application
   title:
     en_us: UISP
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "10443"
+  port_map: '12158'
+

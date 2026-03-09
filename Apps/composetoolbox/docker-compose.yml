@@ -1,29 +1,16 @@
-# Configuration for ComposeToolbox setup
-
-# Name of the big-bear-composetoolbox application
 name: big-bear-composetoolbox
-# Service definitions for the big-bear-composetoolbox application
 services:
-  # Service name: big-bear-composetoolbox
-  # The `big-bear-composetoolbox` service definition
   big-bear-composetoolbox:
-    # Environment variables
     environment:
-      # Node environment
       NODE_ENV: production
-    # Image to be used for the container
     image: ghcr.io/bluegoosemedia/composetoolbox:latest
     pull_policy: always
-    # Ports mapping between host and container
     ports:
-      - "3002:3000"
-    # Container restart policy
+      - '3002:3000'
     restart: unless-stopped
-    # Volumes to be mounted to the container
     volumes:
-      - /DATA/AppData/$AppID/data:/app/data
-    # Name of the container
-    container_name: "big-bear-composetoolbox"
+      - /DATA/.docker/AppData/$AppID/data:/app/data
+    container_name: big-bear-composetoolbox
     x-casaos:
       envs:
         - container: NODE_ENV
@@ -34,34 +21,24 @@ services:
           description:
             en_us: 'Container Path: /app/data'
       ports:
-        - container: "3000"
+        - container: '3000'
           description:
             en_us: 'Container Port: 3000'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-composetoolbox
-  # Detailed description for the application
   description:
     en_us: Self-hosted tool to edit, validate, and get suggestions for docker-compose.yml files.
-  # Brief tagline for the application
   tagline:
     en_us: Compose file editor & validator
-  # Developer's information
   developer: bluegoosemedia
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/bluegoosemedia/composetoolbox@498d1527dcf9cc6422300216df6244ea79ae3630/public/favicon.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Compose Toolbox
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "3002"
+  port_map: '3002'
+

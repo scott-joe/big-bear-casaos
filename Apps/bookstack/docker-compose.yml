@@ -1,21 +1,11 @@
-# Configuration for bookstack setup
-
-# Name of the big-bear-bookstack application
 name: big-bear-bookstack
-# Service definitions for the big-bear-bookstack application
 services:
-  # Service name: big-bear-bookstack
-  # The `big-bear-bookstack` service definition
   big-bear-bookstack:
-    # Name of the container
     container_name: big-bear-bookstack
-    # Image to be used for the container
     image: linuxserver/bookstack:25.12.20251224
-    # Container restart policy
     restart: unless-stopped
     volumes:
-      - /DATA/AppData/$AppID/config:/config
-    # Environment variables
+      - /DATA/.docker/AppData/$AppID/config:/config
     environment:
       - APP_KEY=base64:3w/hRS2HYVFH5tJqD9AFlyurTh8mBByMKeMRyH9kEEQ=
       - APP_URL=http://[change to your IP]:8080
@@ -23,10 +13,8 @@ services:
       - DB_USERNAME=bigbear
       - DB_PASSWORD=a3e8949f-484c-4877-afdb-391f892f9bb6
       - DB_DATABASE=bookstackapp
-    # Ports mapping between host and container
     ports:
-      # Mapping port 8080 of the host to port 80 of the container
-      - "8080:80"
+      - '12009:80'
     depends_on:
       - big-bear-bookstack-db
     networks:
@@ -56,23 +44,22 @@ services:
           description:
             en_us: 'Container Path: /config'
       ports:
-        - container: "80"
+        - container: '80'
           description:
             en_us: 'Container Port: 80'
-  # Service definition for the database (MariaDB)
   big-bear-bookstack-db:
-    image: linuxserver/mariadb:10.11.6 # The Docker image for MariaDB
-    container_name: big-bear-bookstack-db # Name of the container
-    environment: # Environment variables for the MariaDB service
-      - MYSQL_ROOT_PASSWORD=793e92b7-58d2-47b9-aae5-b8c7d58bd699 # Root password for MariaDB
-      - MYSQL_DATABASE=bookstackapp # Database name
-      - MYSQL_USER=bigbear # Database user
-      - MYSQL_PASSWORD=a3e8949f-484c-4877-afdb-391f892f9bb6 # Database password
+    image: linuxserver/mariadb:10.11.6
+    container_name: big-bear-bookstack-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=793e92b7-58d2-47b9-aae5-b8c7d58bd699
+      - MYSQL_DATABASE=bookstackapp
+      - MYSQL_USER=bigbear
+      - MYSQL_PASSWORD=a3e8949f-484c-4877-afdb-391f892f9bb6
     volumes:
-      - /DATA/AppData/$AppID/mysql:/config # Mount the volume for MariaDB data
-    restart: unless-stopped # Restart policy
+      - /DATA/.docker/AppData/$AppID/mysql:/config
+    restart: unless-stopped
     networks:
-      - big_bear_bookstack_network # Connect to the bookstack-network
+      - big_bear_bookstack_network
     x-casaos:
       envs:
         - container: MYSQL_ROOT_PASSWORD
@@ -91,40 +78,28 @@ services:
         - container: /config
           description:
             en_us: 'Container Path: /config'
-# Network definition for the bookstack application
 networks:
   big_bear_bookstack_network:
     driver: bridge
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-bookstack
-  # Detailed description for the application
   description:
     en_us: BookStack is a simple, self-hosted, easy-to-use platform for organising and storing information. Default login admin@admin.com password password
-  # Brief tagline for the application
   tagline:
     en_us: BookStack
-  # Developer's information
   developer: Dan Brown
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/bookstack.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Before you install read this: https://community.bigbeartechworld.com/t/added-bookstack-to-bigbearcasaos/1262#p-2263-documentation-3
-  # Title for the application
   title:
     en_us: bookstack
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8080"
+  port_map: '12009'
+

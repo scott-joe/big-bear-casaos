@@ -1,59 +1,37 @@
-# Configuration for changedetection setup
-
-# Name of the big-bear-changedetection application
 name: big-bear-changedetection
-# Service definitions for the big-bear-changedetection application
 services:
-  # Service name: big-bear-changedetection
-  # The `big-bear-changedetection` service definition
   big-bear-changedetection:
-    # Name of the container
     container_name: big-bear-changedetection
-    # Image to be used for the container
     image: ghcr.io/dgtlmoon/changedetection.io:0.54.3
-    # Container restart policy
     restart: unless-stopped
-    # Ports mapping between host and container
     ports:
-      # Mapping port 5000 of the host to port 5000 of the container
-      - "5000:5000"
-    # Volumes to be mounted to the container
+      - '12012:5000'
     volumes:
-      - /DATA/AppData/$AppID/datastore:/datastore
+      - /DATA/.docker/AppData/$AppID/datastore:/datastore
     x-casaos:
       volumes:
         - container: /datastore
           description:
             en_us: 'Container Path: /datastore'
       ports:
-        - container: "5000"
+        - container: '5000'
           description:
             en_us: 'Container Port: 5000'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-changedetection
-  # Detailed description for the application
   description:
     en_us: The best and simplest free open source website change detection, restock monitor and notification service.
-  # Brief tagline for the application
   tagline:
     en_us: Website change detection.
-  # Developer's information
   developer: dgtlmoon
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/changedetection.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Change Detection
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "5000"
+  port_map: '12012'
+

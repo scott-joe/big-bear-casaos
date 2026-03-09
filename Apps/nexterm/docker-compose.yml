@@ -1,65 +1,41 @@
-# Configuration for nexterm setup
-
-# Name of the big-bear-nexterm application
 name: big-bear-nexterm
-# Service definitions for the big-bear-nexterm application
 services:
-  # Service name: big-bear-nexterm
-  # The `big-bear-nexterm` service definition
   big-bear-nexterm:
-    # Name of the container
     container_name: big-bear-nexterm
-    # Image to be used for the container
     image: germannewsmaker/nexterm:1.0.9-OPEN-PREVIEW
-    # Container restart policy
     restart: unless-stopped
-    # Volumes to be mounted to the container
     volumes:
-      # Mounting the local nexterm_data directory to /app/data inside the container
-      - /DATA/AppData/$AppID/data:/app/data
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/data:/app/data
     ports:
-      # Mapping port 6989 of the host to port 6989 of the container
-      - "6989:6989"
+      - '6989:6989'
     x-casaos:
       volumes:
         - container: /app/data
           description:
             en_us: 'Container Path: /app/data'
       ports:
-        - container: "6989"
+        - container: '6989'
           description:
             en_us: 'Container Port: 6989'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-nexterm
-  # Detailed description for the application
   description:
     en_us: The open source server management software for SSH, VNC & RDP. This is in Preview Release.
-  # Brief tagline for the application
   tagline:
     en_us: Nexterm
-  # Developer's information
   developer: germannewsmaker
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps/apps/nexterm/logo.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Read this before installing: https://community.bigbeartechworld.com/t/added-nexterm-to-bigbearcasaos/1835#p-3452-documentation-3
-  # Title for the application
   title:
     en_us: Nexterm
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "6989"
+  port_map: '6989'
+

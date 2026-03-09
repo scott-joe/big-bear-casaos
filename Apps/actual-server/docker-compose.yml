@@ -1,50 +1,37 @@
-# Configuration for big-bear-actual-server setup
 name: big-bear-actual-server
-# Service definitions for the big-bear-actual-server application
 services:
-  # Service name: app
   app:
-    image: actualbudget/actual-server:26.3.0 # The Docker image to use (latest version of actual-server)
-    container_name: actual-server # Name of the container instance
+    image: actualbudget/actual-server:26.3.0
+    container_name: actual-server
     volumes:
-      - /DATA/AppData/$AppID:/data # Mounting the data volume
+      - /DATA/.docker/AppData/$AppID:/data
     ports:
-      - "5006:5006" # Expose actual-server's port 5006 on the host's port 5006
-    restart: unless-stopped # Policy to restart the container if it stops unexpectedly
+      - '5006:5006'
+    restart: unless-stopped
     x-casaos:
       volumes:
         - container: /data
           description:
             en_us: 'Container Path: /data'
       ports:
-        - container: "5006"
+        - container: '5006'
           description:
             en_us: 'Container Port: 5006'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: Actual Budget is a super fast and privacy-focused app for managing your finances. At its heart is the well proven and much loved Envelope Budgeting methodology. You own your data and can do whatever you want with it. Featuring multi-device sync, optional end-to-end encryption and so much more.
-  # Brief tagline for the application
   tagline:
     en_us: Local-first OpenSource Budget tool
-  # Developer's information
   developer: actualbudget
-  # Author of this particular configuration
   author: BigBearCommunity
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/actual-budget.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Actual Budget
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "5006"
+  port_map: '5006'
+

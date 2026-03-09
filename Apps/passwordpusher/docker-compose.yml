@@ -1,34 +1,18 @@
-# Configuration for pwpush setup
-
-# Name of the big-bear-pwpush application
 name: big-bear-pwpush
-# Service definitions for the big-bear-pwpush application
 services:
-  # Service name: big-bear-pwpush
-  # The `big-bear-pwpush` service definition
   big-bear-pwpush:
-    # Name of the container (Docker does not have to generate a random name)
     container_name: big-bear-pwpush
-    # Image to be used for the container
     image: pglombardo/pwpush:1.69.1
-    # Container restart policy
     restart: unless-stopped
-    # Environment variables for the container
     environment:
-      # Database connection string
-      DATABASE_URL: "mysql2://pwpusher:6280144a-56af-486f-9088-ac7301399328@big-bear-pwpush-db:3306/passwordpusher_db"
-      # Password expiration settings
-      PWP__PW__EXPIRE_AFTER_DAYS_DEFAULT: "1"
-      PWP__PW__EXPIRE_AFTER_VIEWS_MIN: "1"
-      PWP__PW__RETRIEVAL_STEP_DEFAULT: "true"
-    # Volumes to be mounted to the container
+      DATABASE_URL: mysql2://pwpusher:6280144a-56af-486f-9088-ac7301399328@big-bear-pwpush-db:3306/passwordpusher_db
+      PWP__PW__EXPIRE_AFTER_DAYS_DEFAULT: '1'
+      PWP__PW__EXPIRE_AFTER_VIEWS_MIN: '1'
+      PWP__PW__RETRIEVAL_STEP_DEFAULT: 'true'
     volumes:
-      # Storage volume
-      - /DATA/AppData/$AppID/storage:/opt/PasswordPusher/storage
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/storage:/opt/PasswordPusher/storage
     ports:
-      # Mapping port 5100 of the host to port 5100 of the container
-      - "5100:5100"
+      - '5100:5100'
     networks:
       - big_bear_pwpush_network
     x-casaos:
@@ -50,21 +34,21 @@ services:
           description:
             en_us: 'Container Path: /opt/PasswordPusher/storage'
       ports:
-        - container: "5100"
+        - container: '5100'
           description:
             en_us: 'Container Port: 5100'
   big-bear-pwpush-db:
     container_name: big-bear-pwpush-db
     image: mariadb:10.6.5
     ports:
-      - "3306:3306"
+      - '12100:3306'
     environment:
-      MARIADB_USER: "pwpusher"
-      MARIADB_PASSWORD: "6280144a-56af-486f-9088-ac7301399328"
-      MARIADB_DATABASE: "passwordpusher_db"
-      MARIADB_RANDOM_ROOT_PASSWORD: "yes"
+      MARIADB_USER: pwpusher
+      MARIADB_PASSWORD: 6280144a-56af-486f-9088-ac7301399328
+      MARIADB_DATABASE: passwordpusher_db
+      MARIADB_RANDOM_ROOT_PASSWORD: 'yes'
     volumes:
-      - /DATA/AppData/$AppID/mysql:/var/lib/mysql
+      - /DATA/.docker/AppData/$AppID/mysql:/var/lib/mysql
     networks:
       - big_bear_pwpush_network
     x-casaos:
@@ -86,42 +70,31 @@ services:
           description:
             en_us: 'Container Path: /var/lib/mysql'
       ports:
-        - container: "3306"
+        - container: '3306'
           description:
             en_us: 'Container Port: 3306'
 networks:
   big_bear_pwpush_network:
     driver: bridge
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-pwpush
-  # Detailed description for the application
   description:
     en_us: Password Pusher is an open source application to communicate passwords over the web. Links to passwords expire after a certain number of views and/or time has passed.
-  # Brief tagline for the application
   tagline:
     en_us: Give your users the tools to be secure by default.
-  # Developer's information
   developer: pglombardo
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/password-pusher.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Read this before installing: https://community.bigbeartechworld.com/t/added-password-pusher-to-bigbearcasaos/1508?u=dragonfire1119
-  # Title for the application
   title:
     en_us: Password Pusher
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "5100"
+  port_map: '5100'
+

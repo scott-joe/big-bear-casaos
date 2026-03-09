@@ -1,22 +1,14 @@
-# Name of the configuration: big-bear-flcontainers-guacamole
 name: big-bear-flcontainers-guacamole
-# Define the services required for the application
 services:
-  # app service configuration
   app:
-    # Docker image to use for this service
     image: flcontainers/guacamole:1.6.0
-    # Container name
     container_name: big-bear-flcontainers-guacamole
-    # Restart policy for the container
     restart: always
-    # Environment variables for the app service
     environment:
-      tz: "UTC"
-      EXTENSIONS: "auth-totp,auth-ldap"
-    # Map port 8080 on the host to port 8080 on the container
+      tz: UTC
+      EXTENSIONS: auth-totp,auth-ldap
     ports:
-      - 8080:8080
+      - '12035:8080'
     x-casaos:
       envs:
         - container: tz
@@ -26,34 +18,24 @@ services:
           description:
             en_us: 'Container Variable: EXTENSIONS'
       ports:
-        - container: "8080"
+        - container: '8080'
           description:
             en_us: 'Container Port: 8080'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: A Docker Container for Apache Guacamole, a client-less remote desktop gateway. It supports standard protocols like VNC, RDP, and SSH over HTML5.
-  # Brief tagline for the application
   tagline:
     en_us: Fully packaged Multi-Arch Guacamole.
-  # Developer's information
   developer: flcontainers
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/apache-guacamole.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: FlContainers Guacamole
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8080"
+  port_map: '12035'
+

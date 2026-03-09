@@ -1,23 +1,12 @@
-# Configuration for uptime-kuma setup
-
-# Name of the big-bear-uptime-kuma application
 name: big-bear-uptime-kuma
-# Service definitions for the big-bear-uptime-kuma application
 services:
-  # Service name: app
-  # The `app` service definition includes the docker image, container name, volume mappings, port configurations, restart policy, and CasaOS specific settings.
   app:
-    # Docker image to use for the app service
     image: louislam/uptime-kuma:2
-    # Custom container name for identification
     container_name: uptime-kuma
-    # Volume mappings: Maps host directory to container directory for persistent storage
     volumes:
-      - /DATA/AppData/$AppID/data:/app/data
-    # Port mapping: Maps a port on the host to a port on the container
+      - /DATA/.docker/AppData/$AppID/data:/app/data
     ports:
-      - "3001:3001" # <Host Port>:<Container Port>
-    # Restart policy: Always restart the container if it stops
+      - '12175:3001'
     restart: always
     x-casaos:
       volumes:
@@ -25,34 +14,24 @@ services:
           description:
             en_us: 'Container Path: /app/data'
       ports:
-        - container: "3001"
+        - container: '3001'
           description:
             en_us: 'Container Port: 3001'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: A fancy self-hosted monitoring tool
-  # Brief tagline for the application
   tagline:
     en_us: A fancy self-hosted monitoring tool
-  # Developer's information
   developer: louislam
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/uptime-kuma.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Uptime Kuma
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "3001"
+  port_map: '12175'
+

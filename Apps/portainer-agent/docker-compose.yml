@@ -1,18 +1,14 @@
-# Configuration for big-bear-portainer-agent setup
 name: big-bear-portainer-agent
-# Service definitions for the big-bear-portainer-agent application
 services:
-  # Main Portainer Agent Server service configuration
   app:
-    container_name: portainer-agent # Name of the running container
-    image: portainer/agent:2.39.0 # Image to be used
-    network_mode: bridge # Network mode to be used
-    ports: # Port mapping between host and container
-      - 9001:9001
-      # Maps port 9001 on the host to port 9001 in the container
+    container_name: portainer-agent
+    image: portainer/agent:2.39.0
+    network_mode: bridge
+    ports:
+      - '12130:9001'
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock # Bind mount for Docker socket
-      - /var/lib/docker/volumes:/var/lib/docker/volumes # Bind mount for Docker volumes
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
     x-casaos:
       volumes:
         - container: /var/run/docker.sock
@@ -22,39 +18,28 @@ services:
           description:
             en_us: 'Container Path: /var/lib/docker/volumes'
       ports:
-        - container: "9001"
+        - container: '9001'
           description:
             en_us: 'Container Port: 9001'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: Portainer uses the Portainer Agent container to communicate with the Portainer Server instance and provide access to the node's resources. This document will outline how to install the Portainer Agent on your node and how to connect to it from your Portainer Server instance. If you do not have a working Portainer Server instance yet, please refer to the Portainer Server installation guide first.
-  # Brief tagline for the application
   tagline:
     en_us: Portainer Agent
-  # Developer's information
   developer: portainer
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/portainer.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         The Portainer Agent is reachable on port 9001. You will need Portainer Server running to connect to the Portainer Agent.
-  # Title for the application
   title:
     en_us: Portainer Agent
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: ""
+  port_map: '12130'
+

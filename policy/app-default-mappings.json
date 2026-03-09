@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 2,
+  "description": "Legacy compatibility index. Use dedicated policy files under policy/ as source of truth.",
+  "policyFiles": {
+    "storage": "policy/storage-policy.json",
+    "ports": "policy/port-policy.json",
+    "credentials": "policy/credential-policy.json"
+  },
+  "notes": [
+    "This file remains for compatibility with older tooling and documentation.",
+    "New tooling should read dedicated files directly."
+  ]
+}

@@ -1,31 +1,20 @@
-# Configuration for plex setup
-
-# Name of the big-bear-plex application
 name: big-bear-plex
-# Service definitions for the big-bear-plex application
 services:
-  # Service name: big-bear-plex
-  # The `big-bear-plex` service definition
   big-bear-plex:
-    # Name of the container
     container_name: big-bear-plex
-    # Image to be used for the container
     image: linuxserver/plex:1.43.0
     environment:
-      - PUID=1000 # specify the user id
-      - PGID=1000 # specify the group id
-      - TZ=Etc/UTC # specify a timezone to use.
-      - VERSION=docker # Set whether to update plex or not.
-      - PLEX_CLAIM= #optional Optionally you can obtain a claim token from https://plex.tv/claim and input here. Keep in mind that the claim tokens expire within 4 minutes.
-    # Container restart policy
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - VERSION=docker
+      - PLEX_CLAIM=
     restart: unless-stopped
-    # Network mode for the container
     network_mode: host
-    # Volumes to be mounted to the container
     volumes:
-      - /DATA/AppData/$AppID/config:/config
-      - /DATA/AppData/$AppID/tv:/tv
-      - /DATA/AppData/$AppID/movies:/movies
+      - /DATA/.docker/AppData/$AppID/config:/config
+      - /media/Safe-Storage/Library/TV:/tv
+      - /media/Safe-Storage/Library/Movies:/movies
     x-casaos:
       envs:
         - container: PUID
@@ -54,30 +43,20 @@ services:
           description:
             en_us: 'Container Path: /movies'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-plex
-  # Detailed description for the application
   description:
     en_us: Stream Movies & TV Shows
-  # Brief tagline for the application
   tagline:
     en_us: Stream Movies & TV Shows
-  # Developer's information
   developer: plexinc
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/plex.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Plex
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "32400"
+  port_map: '32400'
+
