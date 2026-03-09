@@ -60,6 +60,9 @@ jobs:
       - name: Check sensitive content (changed files)
         run: |
           pnpm run check:sensitive-content -- --base-sha "${{ steps.diff-range.outputs.base_sha }}" --head-sha "${{ steps.diff-range.outputs.head_sha }}"
+      - name: Check manifest policy (full registry)
+        run: |
+          pnpm run check:manifest-policy
 
       - name: Run global tests
         run: pnpm test

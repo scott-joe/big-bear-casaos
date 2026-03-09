@@ -2,6 +2,8 @@
   "schemaVersion": 1,
   "description": "Host port allocation and compatibility policy for app manifests.",
   "enforceUniqueHostPorts": true,
+  "enforceUniquePortMap": true,
+  "ignoreHostNetworkForPortMapUniqueness": true,
   "authoritativeField": "x-casaos.port_map",
   "preferredRanges": [
     {
@@ -41,6 +43,16 @@
     "upsnap",
     "watchyourlan"
   ],
+  "rangePortExceptions": {
+    "crafty": [
+      "25500-25600:25500-25600"
+    ],
+    "traccar": [
+      "5000-5150:5000-5150",
+      "5000-5150:5000-5150/udp"
+    ]
+  },
+  "allowDuplicatePortMapForApps": [],
   "explicitAssignments": {},
   "notes": [
     "Use explicitAssignments for apps that must keep fixed host ports.",
