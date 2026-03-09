@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import yaml from "js-yaml";
 
-const args = process.argv.slice(2);
+const args = process.argv.slice(2).filter((arg) => arg !== "--");
 const cwd = process.cwd();
 
 const getArgValue = (name) => {
@@ -11,20 +11,24 @@ const getArgValue = (name) => {
   return index >= 0 ? args[index + 1] : undefined;
 };
 
-const runGit = (command) => {
+const runGitLines = (command) => {
   return execSync(command, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] })
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean);
 };
 
+const runGitOutput = (command) => {
+  return execSync(command, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+};
+
 const safeGitList = (primaryCommand, fallbackCommands = []) => {
   try {
-    return runGit(primaryCommand);
+    return runGitLines(primaryCommand);
   } catch {
     for (const command of fallbackCommands) {
       try {
-        return runGit(command);
+        return runGitLines(command);
       } catch {
         continue;
       }
@@ -40,7 +44,6 @@ const listCandidateFiles = () => {
   const headSha = getArgValue("--head-sha");
 
   let files = [];
-
   if (staged) {
     files = safeGitList("git diff --cached --name-only --diff-filter=ACMR");
   } else if (baseSha && headSha) {
@@ -116,16 +119,13 @@ const normalizeString = (value) => {
 
 const isSensitiveKey = (key) => {
   const upper = key.toUpperCase();
-
   return sensitivePatterns.some((pattern) => {
     if (pattern === "PASS") {
       return /(^|_)(PASS|PASSWORD|PASSPHRASE)(_|$)/u.test(upper);
     }
-
     if (pattern === "KEY") {
       return /(^|_)(KEY|API_KEY|PRIVATE_KEY|SECRET_KEY|ACCESS_KEY)(_|$)/u.test(upper);
     }
-
     return upper.includes(pattern);
   });
 };
@@ -141,18 +141,15 @@ const isPlaceholderValue = (value) => {
 const appHasExceptionForKey = (appId, key) => {
   const appException = byAppExceptionsRaw?.[appId];
   if (!appException) return false;
-
   if (Array.isArray(appException)) {
     const entries = appException.map((value) => String(value).toUpperCase());
     return entries.includes(key.toUpperCase());
   }
-
   return false;
 };
 
 const collectEnvironmentEntries = (environment) => {
   const entries = [];
-
   if (Array.isArray(environment)) {
     for (const item of environment) {
       if (typeof item === "string") {
@@ -162,20 +159,17 @@ const collectEnvironmentEntries = (environment) => {
           if (key) entries.push({ key, value: "" });
           continue;
         }
-
         const key = item.slice(0, separatorIndex).trim();
         const value = item.slice(separatorIndex + 1);
         if (key) entries.push({ key, value });
         continue;
       }
-
       if (item && typeof item === "object") {
         for (const [key, value] of Object.entries(item)) {
           entries.push({ key, value });
         }
       }
     }
-
     return entries;
   }
 
@@ -184,7 +178,6 @@ const collectEnvironmentEntries = (environment) => {
       entries.push({ key, value });
     }
   }
-
   return entries;
 };
 
@@ -194,23 +187,32 @@ const maskValue = (value) => {
   return `${value.slice(0, 2)}***${value.slice(-2)}`;
 };
 
-const files = listCandidateFiles();
-if (files.length === 0) {
-  console.log("✅ Credential policy check skipped (no target docker-compose files in scope).");
-  process.exit(0);
-}
+const parseCompose = (content) => {
+  try {
+    const parsed = yaml.load(content);
+    return parsed && typeof parsed === "object" ? parsed : null;
+  } catch {
+    return null;
+  }
+};
 
-const issues = [];
+const loadComposeFromRef = (ref, file) => {
+  try {
+    const content = runGitOutput(`git show ${ref}:${file}`);
+    return parseCompose(content);
+  } catch {
+    return null;
+  }
+};
 
-for (const file of files) {
+const collectIssuesFromCompose = (file, compose) => {
+  const issues = [];
+  if (!compose || typeof compose !== "object") return issues;
+
   const appIdMatch = file.match(/^Apps\/([^/]+)\//u);
   const appId = appIdMatch?.[1] ?? "unknown-app";
-
-  const content = fs.readFileSync(path.join(cwd, file), "utf8");
-  const compose = yaml.load(content);
   const services = compose?.services;
-
-  if (!services || typeof services !== "object") continue;
+  if (!services || typeof services !== "object") return issues;
 
   for (const [serviceName, serviceDefinition] of Object.entries(services)) {
     if (!serviceDefinition || typeof serviceDefinition !== "object") continue;
@@ -254,6 +256,62 @@ for (const file of files) {
       });
     }
   }
+
+  return issues;
+};
+
+const issueSignature = (issue) =>
+  [
+    issue.file,
+    issue.appId,
+    issue.serviceName,
+    issue.key,
+    issue.value,
+    issue.reason,
+  ].join("|");
+
+const files = listCandidateFiles();
+if (files.length === 0) {
+  console.log("✅ Credential policy check skipped (no target docker-compose files in scope).");
+  process.exit(0);
+}
+
+const baseSha = getArgValue("--base-sha");
+const headSha = getArgValue("--head-sha");
+const compareAgainstBase = Boolean(baseSha && headSha);
+
+const issues = [];
+
+for (const file of files) {
+  const workingPath = path.join(cwd, file);
+  const headCompose =
+    compareAgainstBase && headSha
+      ? loadComposeFromRef(headSha, file) ?? parseCompose(fs.readFileSync(workingPath, "utf8"))
+      : parseCompose(fs.readFileSync(workingPath, "utf8"));
+
+  if (!headCompose) continue;
+  const headIssues = collectIssuesFromCompose(file, headCompose);
+
+  if (!compareAgainstBase) {
+    issues.push(...headIssues);
+    continue;
+  }
+
+  const baseCompose = loadComposeFromRef(baseSha, file);
+  if (!baseCompose) {
+    issues.push(...headIssues);
+    continue;
+  }
+
+  const baseSignatures = new Set(
+    collectIssuesFromCompose(file, baseCompose).map((issue) => issueSignature(issue))
+  );
+
+  for (const issue of headIssues) {
+    if (!baseSignatures.has(issueSignature(issue))) {
+      issues.push(issue);
+    }
+  }
 }
 
 if (issues.length > 0) {
@@ -268,4 +326,11 @@ if (issues.length > 0) {
   process.exit(1);
 }
 
-console.log(`✅ Credential policy check passed (${files.length} file(s) checked).`);
+if (compareAgainstBase) {
+  console.log(
+    `✅ Credential policy check passed (${files.length} file(s) checked, no newly introduced violations).`
+  );
+} else {
+  console.log(`✅ Credential policy check passed (${files.length} file(s) checked).`);
+}
+
