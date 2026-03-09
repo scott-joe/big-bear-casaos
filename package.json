@@ -4,10 +4,17 @@
   "description": "",
   "main": "",
   "scripts": {
+    "prepare": "husky",
     "generate-readme": "bun .github/scripts/readme-generator.ts",
     "commit": "git-cz",
     "lint": "eslint ./apps --ext .json",
-    "test": "jest"
+    "test": "jest",
+    "policy:rewrite:preview": "node scripts/policy/rewrite-app-manifests.mjs",
+    "policy:rewrite:write": "node scripts/policy/rewrite-app-manifests.mjs --write",
+    "check:credential-policy": "node scripts/security/check-credential-policy.mjs",
+    "check:sensitive-content": "node scripts/security/check-sensitive-content.mjs",
+    "check:security": "pnpm run check:credential-policy -- --all && pnpm run check:sensitive-content -- --all",
+    "precommit:security": "pnpm run check:credential-policy -- --staged && pnpm run check:sensitive-content -- --staged"
   },
   "repository": {
     "type": "git",

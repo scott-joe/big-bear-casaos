@@ -1,6 +1,16 @@
 node_modules/
 package-lock.json
 github.secrets
+.env
+.env.*
+!.env.example
+.envrc
+*.pem
+*.key
+*.p12
+*.pfx
+*.kubeconfig
+policy/*.local.json
 .DS_Store
 .nova
 .vscode/
