@@ -1,43 +1,29 @@
-# Configuration for plex-nvidia setup
-
-# Name of the big-bear-plex-nvidia application
 name: big-bear-plex-nvidia
-# Service definitions for the big-bear-plex-nvidia application
 services:
-  # Service name: big-bear-plex-nvidia
-  # The `big-bear-plex-nvidia` service definition
   big-bear-plex-nvidia:
-    # Name of the container
     container_name: big-bear-plex-nvidia
-    # Image to be used for the container
     image: linuxserver/plex:1.43.0
-    # Environment variables for the container
     environment:
-      - PUID=1000 # specify the user id
-      - PGID=1000 # specify the group id
-      - TZ=Etc/UTC # specify a timezone to use.
-      - VERSION=docker # Set whether to update plex or not.
-      - PLEX_CLAIM= #optional Optionally you can obtain a claim token from https://plex.tv/claim and input here. Keep in mind that the claim tokens expire within 4 minutes.
-      - CPU_FALLBACK=true # Optional, only if you have a GPU
-      - NVIDIA_VISIBLE_DEVICES=all # Optional, only if you have a GPU
-    # Container restart policy
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - VERSION=docker
+      - PLEX_CLAIM=
+      - CPU_FALLBACK=true
+      - NVIDIA_VISIBLE_DEVICES=all
     restart: unless-stopped
-    # Network mode for the container
     network_mode: host
-    # Volumes to be mounted to the container
     volumes:
-      - /DATA/AppData/$AppID/config:/config
-      - /DATA/AppData/$AppID/tv:/tv
-      - /DATA/AppData/$AppID/movies:/movies
-    # Devices to be mounted to the container
+      - /DATA/.docker/AppData/$AppID/config:/config
+      - /media/Safe-Storage/Library/TV:/tv
+      - /media/Safe-Storage/Library/Movies:/movies
     devices:
-      - /dev/dri:/dev/dri # Optional, only if you have a GPU
-      - /dev/dvb:/dev/dvb # Optional, only if you have a DVB card
-    # Deploy configuration
+      - /dev/dri:/dev/dri
+      - /dev/dvb:/dev/dvb
     deploy:
       resources:
         reservations:
-          memory: "256M"
+          memory: 256M
           devices:
             - capabilities:
                 - gpu
@@ -75,35 +61,24 @@ services:
           description:
             en_us: 'Container Path: /movies'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-plex-nvidia
-  # Detailed description for the application
   description:
     en_us: Stream Movies & TV Shows with NVIDIA GPU
-  # Brief tagline for the application
   tagline:
     en_us: Stream Movies & TV Shows with NVIDIA GPU
-  # Developer's information
   developer: plexinc
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/plex.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Read this before installing: https://community.bigbeartechworld.com/t/added-plex-with-nvidia-gpu-to-bigbearcasaos/3447?u=dragonfire1119
-  # Title for the application
   title:
     en_us: Plex with NVIDIA GPU
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "32400"
+  port_map: '32400'
+

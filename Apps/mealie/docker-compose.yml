@@ -1,65 +1,41 @@
-# Configuration for mealie setup
-
-# Name of the big-bear-mealie application
 name: big-bear-mealie
-# Service definitions for the big-bear-mealie application
 services:
-  # Service name: app
-  # The `app` service definition
   app:
-    # Name of the container
     container_name: big-bear-mealie
-    # Image to be used for the container
     image: hkotel/mealie:v3.11.0
-    # Container restart policy
     restart: unless-stopped
-    # Volumes to be mounted to the container
     volumes:
-      # Mounting the local mealie_data directory to /app/data inside the container
-      - /DATA/AppData/$AppID/data:/app/data
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/data:/app/data
     ports:
-      # Mapping port 7575 of the host to port 9000 of the container
-      - "9925:9000"
+      - '9925:9000'
     x-casaos:
       volumes:
         - container: /app/data
           description:
             en_us: 'Container Path: /app/data'
       ports:
-        - container: "9000"
+        - container: '9000'
           description:
             en_us: 'Container Port: 9000'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: Mealie is a self hosted recipe manager and meal planner with a RestAPI backend and a reactive frontend application built in Vue for a pleasant user experience for the whole family. Easily add recipes into your database by providing the url and mealie will automatically import the relevant data or add a family recipe with the UI editor
-  # Brief tagline for the application
   tagline:
     en_us: Mealie
-  # Developer's information
   developer: mealie-recipes
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/mealie.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Read this: https://community.bigbeartechworld.com/t/added-mealie-to-bigbearcasaos/587
-  # Title for the application
   title:
     en_us: Mealie
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "9925"
+  port_map: '9925'
+

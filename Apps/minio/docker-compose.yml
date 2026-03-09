@@ -4,18 +4,18 @@ services:
     image: bigbeartechworld/big-bear-minio:RELEASE.2025-10-15T17-29-55Z
     container_name: big-bear-minio
     volumes:
-      - /DATA/AppData/$AppID:/data
+      - /DATA/.docker/AppData/$AppID:/data
     ports:
-      - "9010:9000"
-      - "9011:9001"
+      - '9010:9000'
+      - '9011:9001'
     environment:
       MINIO_ROOT_PASSWORD: minioadmin
       MINIO_ROOT_USER: minioadmin
     restart: unless-stopped
     command:
       - server
-      - "--console-address"
-      - ":9001"
+      - '--console-address'
+      - ':9001'
       - /data
     x-casaos:
       envs:
@@ -30,37 +30,27 @@ services:
           description:
             en_us: 'Container Path: /data'
       ports:
-        - container: "9000"
+        - container: '9000'
           description:
             en_us: 'Container Port: 9000'
-        - container: "9001"
+        - container: '9001'
           description:
             en_us: 'Container Port: 9001'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: A distributed object storage server built for cloud applications and devops. Default credentials 'minioadmin:minioadmin', we recommend that you change these values with 'MINIO_ROOT_USER' and 'MINIO_ROOT_PASSWORD' environment variables.
-  # Brief tagline for the application
   tagline:
     en_us: An open-source S3 alternative
-  # Developer's information
   developer: minio
-  # Author of this particular configuration
   author: BigBearCommunity
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/minio.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Minio
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "9011"
+  port_map: '9010'
+

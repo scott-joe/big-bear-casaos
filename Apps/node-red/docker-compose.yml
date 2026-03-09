@@ -1,59 +1,38 @@
-# Configuration for node-red setup
-
-# Application Name
 name: big-bear-node-red
-# Services used in the application
 services:
-  # The `app` service for the node-red application
   app:
-    # Name of the container
     container_name: node-red
-    # Docker image to be used
     image: nodered/node-red:4.1.6
-    # Restart policy for the service
     restart: unless-stopped
-    # Port mappings for the service
     ports:
-      - "1880:1880"
-    # Network mode for the service
+      - '1880:1880'
     network_mode: bridge
-    # Volumes for the service HOST -> CONTAINER
     volumes:
-      - /DATA/AppData/$AppID/data:/data
+      - /DATA/.docker/AppData/$AppID/data:/data
     x-casaos:
       volumes:
         - container: /data
           description:
             en_us: 'Container Path: /data'
       ports:
-        - container: "1880"
+        - container: '1880'
           description:
             en_us: 'Container Port: 1880'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: Node-RED is a programming tool for wiring together hardware devices, APIs and online services in new and interesting ways.  It provides a browser-based editor that makes it easy to wire together flows using the wide range of nodes in the palette that can be deployed to its runtime in a single-click.
-  # Brief tagline for the application
   tagline:
     en_us: Low-code programming for event-driven applications
-  # Developer's information
   developer: nodered
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/node-red.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Node-RED
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "1880"
+  port_map: '1880'
+

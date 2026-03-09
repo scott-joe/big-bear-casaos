@@ -1,15 +1,7 @@
-# Configuration for authentik setup
-
-# Name of the big-bear-authentik application
 name: big-bear-authentik
-# Service definitions for the big-bear-authentik application
 services:
-  # Service name: authentik
-  # The `authentik` service definition
   big-bear-authentik:
-    # Name of the container
     container_name: big-bear-authentik
-    # Image to be used for the container
     image: ghcr.io/goauthentik/server:2025.12.4
     command: server
     environment:
@@ -20,10 +12,10 @@ services:
       AUTHENTIK_POSTGRESQL__PASSWORD: authentik-password
       AUTHENTIK_SECRET_KEY: changeme
     volumes:
-      - /DATA/AppData/$AppID/data/authentik-media:/media
-      - /DATA/AppData/$AppID/data/authentik-custom-templates:/templates
+      - /media/Safe-Storage/Library:/media
+      - /DATA/.docker/AppData/$AppID/data/authentik-custom-templates:/templates
     ports:
-      - "9443:9443"
+      - '9443:9443'
     depends_on:
       - big-bear-authentik-db
       - big-bear-authentik-redis
@@ -57,7 +49,7 @@ services:
           description:
             en_us: 'Container Path: /templates'
       ports:
-        - container: "9443"
+        - container: '9443'
           description:
             en_us: 'Container Port: 9443'
   big-bear-authentik-worker:
@@ -72,18 +64,12 @@ services:
       AUTHENTIK_POSTGRESQL__NAME: authentik
       AUTHENTIK_POSTGRESQL__PASSWORD: authentik-password
       AUTHENTIK_SECRET_KEY: changeme
-    # `user: root` and the docker socket volume are optional.
-    # See more for the docker socket integration here:
-    # https://goauthentik.io/docs/outposts/integrations/docker
-    # Removing `user: root` also prevents the worker from fixing the permissions
-    # on the mounted folders, so when removing this make sure the folders have the correct UID/GID
-    # (1000:1000 by default)
     user: root
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /DATA/AppData/$AppID/data/authentik-media:/media
-      - /DATA/AppData/$AppID/data/authentik-certs:/certs
-      - /DATA/AppData/$AppID/data/authentik-custom-templates:/templates
+      - /media/Safe-Storage/Library:/media
+      - /DATA/.docker/AppData/$AppID/data/authentik-certs:/certs
+      - /DATA/.docker/AppData/$AppID/data/authentik-custom-templates:/templates
     depends_on:
       - big-bear-authentik-db
       - big-bear-authentik-redis
@@ -124,19 +110,18 @@ services:
             en_us: 'Container Path: /templates'
   big-bear-authentik-db:
     container_name: big-bear-authentik-db
-    # PostgreSQL 14+ required by Authentik (since version 2024.6)
-    # BREAKING CHANGE: Existing users with PostgreSQL 12 data need to migrate
-    # See: https://www.postgresql.org/docs/current/upgrading.html
     image: postgres:14-alpine
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      test:
+        - CMD-SHELL
+        - pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}
       start_period: 20s
       interval: 30s
       retries: 5
       timeout: 5s
     volumes:
-      - /DATA/AppData/$AppID/data/postgres:/var/lib/postgresql/data
+      - /DATA/.docker/AppData/$AppID/data/postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: authentik-password
       POSTGRES_USER: authentik
@@ -160,17 +145,24 @@ services:
             en_us: 'Container Path: /var/lib/postgresql/data'
   big-bear-authentik-redis:
     image: redis:8.2.2-alpine@sha256:1c78f5e7512cc8b22b0edc95c20e7abd9e1fd832e5dfd5c3c6b59ce82fb238d0
-    command: ["--save", "60", "1", "--loglevel", "warning"]
+    command:
+      - '--save'
+      - '60'
+      - '1'
+      - '--loglevel'
+      - warning
     container_name: big-bear-authentik-redis
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      test:
+        - CMD-SHELL
+        - redis-cli ping | grep PONG
       start_period: 20s
       interval: 30s
       retries: 5
       timeout: 3s
     volumes:
-      - /DATA/AppData/$AppID/data/redis:/data
+      - /DATA/.docker/AppData/$AppID/data/redis:/data
     networks:
       - big_bear_authentik_network
     x-casaos:
@@ -182,35 +174,24 @@ networks:
   big_bear_authentik_network:
     driver: bridge
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-authentik
-  # Detailed description for the application
   description:
     en_us: Authentik is a self-hosted identity and access management platform that provides a secure and scalable solution for managing user accounts, authentication, and authorization. It offers a range of features, including user management, role-based access control, and multi-factor authentication. Authentik is designed to be easy to use and integrate with your existing systems, making it a great choice for organizations looking to improve their security and compliance.
-  # Brief tagline for the application
   tagline:
     en_us: Authentik
-  # Developer's information
   developer: authentik
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/authentik.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Before you install read this: https://community.bigbeartechworld.com/t/added-authentik-to-bigbearcasaos/1196#instructions-3
-  # Title for the application
   title:
     en_us: Authentik
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "9443"
+  port_map: '9443'
+

@@ -1,28 +1,17 @@
-# Configuration for pd3f setup
-
-# Name of the big-bear-pd3f application
 name: big-bear-pd3f
-# Service definitions for the big-bear-pd3f application
 services:
-  # Service name: web
-  # The `web` service definition
   web:
-    # Name of the container
     container_name: big-bear-pd3f
-    # Image to be used for the container
     image: pd3f/pd3f:latest
-    # Container restart policy
     restart: unless-stopped
-    # Volumes to be mounted to the container
     volumes:
-      # Mounting the local /DATA/AppData/$AppID/uploads directory to /uploads/ inside the container
-      - /DATA/AppData/$AppID/uploads:/uploads/
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/uploads:/uploads/
     ports:
-      # Mapping port 1616 of the host to port 5000 of the container
-      - "1616:5000"
-    command: ["gunicorn", "app:app", "--bind=0.0.0.0:5000"]
-    # Other services that this service depends on
+      - '1616:5000'
+    command:
+      - gunicorn
+      - app:app
+      - '--bind=0.0.0.0:5000'
     depends_on:
       - redis
       - parsr
@@ -36,24 +25,21 @@ services:
           description:
             en_us: 'Container Path: /uploads/'
       ports:
-        - container: "5000"
+        - container: '5000'
           description:
             en_us: 'Container Port: 5000'
-  # Service name: parsr
   parsr:
     image: axarev/parsr:v1.2.2
     networks:
       - big-bear-pd3f-network
     expose:
       - 3001
-  # Service name: redis
   redis:
     image: redis:6.2.20-alpine@sha256:2185e741f4c1e7b0ea9ca1e163a3767c4270a73086b6bbea2049a7203212fb7f
     networks:
       - big-bear-pd3f-network
     expose:
       - 6379
-  # Service name: worker
   worker:
     image: pd3f/pd3f:latest
     depends_on:
@@ -62,13 +48,18 @@ services:
     networks:
       - big-bear-pd3f-network
     volumes:
-      - /DATA/AppData/$AppID/cache:/root/.cache/
-      - /DATA/AppData/$AppID/to-ocr:/to-ocr/
-      - /DATA/AppData/$AppID/uploads:/uploads/
-    # delete results / files after one day
+      - /DATA/.docker/AppData/$AppID/cache:/root/.cache/
+      - /DATA/.docker/AppData/$AppID/to-ocr:/to-ocr/
+      - /DATA/.docker/AppData/$AppID/uploads:/uploads/
     environment:
       - KEEP_RESULTS_HOURS=24
-    command: ["rq", "worker", "-u", "redis://redis:6379", "--results-ttl", "86400"]
+    command:
+      - rq
+      - worker
+      - '-u'
+      - redis://redis:6379
+      - '--results-ttl'
+      - '86400'
     x-casaos:
       envs:
         - container: KEEP_RESULTS_HOURS
@@ -84,47 +75,35 @@ services:
         - container: /uploads/
           description:
             en_us: 'Container Path: /uploads/'
-  # Service name: ocr_worker
   ocr_worker:
     image: pd3f/pd3f-ocr:latest
     networks:
       - big-bear-pd3f-network
     volumes:
-      - /DATA/AppData/$AppID/to-ocr:/to-ocr/
+      - /DATA/.docker/AppData/$AppID/to-ocr:/to-ocr/
     x-casaos:
       volumes:
         - container: /to-ocr/
           description:
             en_us: 'Container Path: /to-ocr/'
-# Network definitions
 networks:
   big-bear-pd3f-network:
     name: big-bear-pd3f-network
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: web
-  # Detailed description for the application
   description:
     en_us: pd3f is a PDF text extraction pipeline that is self-hosted, local-first and Docker-based. It reconstructs the original continuous text with the help of machine learning.
-  # Brief tagline for the application
   tagline:
     en_us: PD3F
-  # Developer's information
   developer: pd3f
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps/apps/pd3f/logo.jpg
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: PD3F
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "1616"
+  port_map: '1616'
+

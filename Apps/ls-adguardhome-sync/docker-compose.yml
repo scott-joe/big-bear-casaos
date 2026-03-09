@@ -1,19 +1,9 @@
-# Configuration for adguard-home-sync setup
-
-# Name of the big-bear-adguard-home-sync application
 name: big-bear-ls-adguard-home-sync
-# Service definitions for the big-bear-adguard-home-sync application
 services:
-  # Service name: big-bear-ls-adguard-home-sync
-  # The `big-bear-ls-adguard-home-sync` service definition
   big-bear-ls-adguard-home-sync:
-    # Name of the container
     container_name: big-bear-ls-adguard-home-sync
-    # Image to be used for the container
     image: linuxserver/adguardhome-sync:0.9.0
-    # Container restart policy
     restart: unless-stopped
-    # Environment variables
     environment:
       - PUID=1000
       - PGID=1000
@@ -28,14 +18,10 @@ services:
       - CRON="0 */2 * * *"
       - RUN_ON_START=true
       - API_PORT=8080
-    # Volumes to be mounted to the container
     volumes:
-      # Mounting the local adguard-home-sync/config directory to /config inside the container
-      - /DATA/AppData/$AppID/config:/config
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/config:/config
     ports:
-      # Mapping port 8080 of the host to port 8080 of the container
-      - "8080:8080"
+      - '12073:8080'
     x-casaos:
       envs:
         - container: PUID
@@ -82,34 +68,24 @@ services:
           description:
             en_us: 'Container Path: /config'
       ports:
-        - container: "8080"
+        - container: '8080'
           description:
             en_us: 'Container Port: 8080'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-ls-adguard-home-sync
-  # Detailed description for the application
   description:
-    en_us: "\U0001F6E1️ Synchronize AdGuard Home config to replicas. This is the LinuxServer version."
-  # Brief tagline for the application
+    en_us: 🛡️ Synchronize AdGuard Home config to replicas. This is the LinuxServer version.
   tagline:
     en_us: LS Adguard Home Sync
-  # Developer's information
   developer: bakito
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/adguard-home.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: LS Adguard Home Sync
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8080"
+  port_map: '12073'
+

@@ -1,19 +1,19 @@
-name: big-bear-firefox # Name of the CasaOS application
+name: big-bear-firefox
 services:
   firefox:
-    container_name: big-bear-firefox # Name of the Docker container
-    image: linuxserver/firefox:1147.0.4 # Docker image for the Firefox browser
+    container_name: big-bear-firefox
+    image: linuxserver/firefox:1147.0.4
     ports:
-      - "3000:3000" # Expose port 3000 for HTTP VNC access
-      - "3001:3001" # Expose port 3001 for HTTPS VNC access
+      - '12033:3000'
+      - '12034:3001'
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-      - FIREFOX_CLI=https://community.bigbeartechworld.com/ # Set the default URL to Big Bear Tech World
-    shm_size: 1gb # Allocate 1 GB of shared memory
+      - FIREFOX_CLI=https://community.bigbeartechworld.com/
+    shm_size: 1gb
     volumes:
-      - /DATA/AppData/$AppID/config:/config # Mount the config directory for persistent data
+      - /DATA/.docker/AppData/$AppID/config:/config
     x-casaos:
       envs:
         - container: PUID
@@ -33,42 +33,31 @@ services:
           description:
             en_us: 'Container Path: /config'
       ports:
-        - container: "3000"
+        - container: '3000'
           description:
             en_us: 'Container Port: 3000'
-        - container: "3001"
+        - container: '3001'
           description:
             en_us: 'Container Port: 3001'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: firefox
-  # Detailed description for the application
   description:
     en_us: This Image contains a browser-accessible version of Firefox.
-  # Brief tagline for the application
   tagline:
     en_us: Firefox
-  # Developer's information
   developer: linuxserver
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/firefox.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Access the browser at http://your-server:3000 or https://your-server:3001
-  # Title for the application
   title:
     en_us: Firefox
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "3000"
+  port_map: '12033'
+

@@ -1,33 +1,17 @@
-# Configuration for netalertx setup
-
-# Name of the big-bear-netalertx application
 name: big-bear-netalertx
-# Service definitions for the big-bear-netalertx application
 services:
-  # Service name: big-bear-netalertx
-  # The `big-bear-netalertx` service definition
   big-bear-netalertx:
-    # Name of the container
     container_name: big-bear-netalertx
-    # Image to be used for the container
     image: jokobsk/netalertx:26.2.6
-    # Container restart policy
     restart: unless-stopped
-    # Make the container privileged
     privileged: true
-    # Volumes to be mounted to the container
     volumes:
-      # Mounting the local netalertx_config directory to /app/config inside the container
-      - /DATA/AppData/$AppID/config:/app/config
-      # Mounting the local netalertx_db directory to /app/db inside the container
-      - /DATA/AppData/$AppID/db:/app/db
-    # Environment variables
+      - /DATA/.docker/AppData/$AppID/config:/app/config
+      - /DATA/.docker/AppData/$AppID/db:/app/db
     environment:
       - TZ=UTC
       - PORT=8080
-      # ❗ DANGER ZONE BELOW - Setting ALWAYS_FRESH_INSTALL=true will delete the content of the /db & /config folders
       - ALWAYS_FRESH_INSTALL=false
-    # Network mode for the container
     network_mode: host
     x-casaos:
       envs:
@@ -48,30 +32,20 @@ services:
           description:
             en_us: 'Container Path: /app/db'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-netalertx
-  # Detailed description for the application
   description:
     en_us: WIFI / LAN intruder detector. Scans for devices connected to your network and alerts you if new and unknown devices are found.
-  # Brief tagline for the application
   tagline:
     en_us: NetAlertX
-  # Developer's information
   developer: jokobsk
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/pi-alert.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: NetAlertX
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8080"
+  port_map: '8080'
+

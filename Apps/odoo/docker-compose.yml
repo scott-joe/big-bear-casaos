@@ -1,35 +1,21 @@
-# Configuration for odoo setup
-
-# Name of the big-bear-odoo application
 name: big-bear-odoo
-# Service definitions for the big-bear-odoo application
 services:
-  # Service name: big-bear-odoo
-  # This section defines the main Odoo service
   big-bear-odoo:
-    # Name of the container
-    container_name: big-bear-odoo # Specifies the container instance name for identification
-    # Image to be used for the container
-    image: odoo:19 # Docker image for Odoo version 17
-    # Container restart policy
-    restart: unless-stopped # Restart policy to ensure service recovery
-    # User to run the container as
-    user: root # Specifies running the container as root
-    # Volumes to be mounted to the container
+    container_name: big-bear-odoo
+    image: odoo:19
+    restart: unless-stopped
+    user: root
     volumes:
-      - /DATA/AppData/$AppID/data/etc:/etc/odoo # Mounts Odoo configuration files
-      - /DATA/AppData/$AppID/data/addons:/mnt/extra-addons # Mounts additional Odoo addons
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/data/etc:/etc/odoo
+      - /DATA/.docker/AppData/$AppID/data/addons:/mnt/extra-addons
     ports:
-      - "8069:8069" # Exposes port 8069 on host and container for web access
-    # Environment variables
+      - '8069:8069'
     environment:
-      - HOST=big-bear-odoo-db # Database host
-      - USER=odoo # Database username
-      - PASSWORD=a8d785b6-bc00-49cc-8675-d404093d1507 # Database password
-    # Networks to be attached to the container
+      - HOST=big-bear-odoo-db
+      - USER=odoo
+      - PASSWORD=a8d785b6-bc00-49cc-8675-d404093d1507
     networks:
-      - big_bear_odoo_network # Specifies network attachment for internal communication
+      - big_bear_odoo_network
     x-casaos:
       envs:
         - container: HOST
@@ -49,23 +35,22 @@ services:
           description:
             en_us: 'Container Path: /mnt/extra-addons'
       ports:
-        - container: "8069"
+        - container: '8069'
           description:
             en_us: 'Container Port: 8069'
-  # Database service for Odoo
   big-bear-odoo-db:
-    container_name: big-bear-odoo-db # Database container name
-    image: postgres:15 # PostgreSQL version 15 Docker image
-    user: root # Runs as root user
+    container_name: big-bear-odoo-db
+    image: postgres:15
+    user: root
     environment:
-      - POSTGRES_USER=odoo # Database user
-      - POSTGRES_PASSWORD=a8d785b6-bc00-49cc-8675-d404093d1507 # Database password
-      - POSTGRES_DB=postgres # Database name
-    restart: unless-stopped # Restart policy for the database
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=a8d785b6-bc00-49cc-8675-d404093d1507
+      - POSTGRES_DB=postgres
+    restart: unless-stopped
     volumes:
-      - /DATA/AppData/$AppID/data/postgresql:/var/lib/postgresql/data # Mounts PostgreSQL data directory
+      - /DATA/.docker/AppData/$AppID/data/postgresql:/var/lib/postgresql/data
     networks:
-      - big_bear_odoo_network # Attached network for internal communication
+      - big_bear_odoo_network
     x-casaos:
       envs:
         - container: POSTGRES_USER
@@ -81,40 +66,28 @@ services:
         - container: /var/lib/postgresql/data
           description:
             en_us: 'Container Path: /var/lib/postgresql/data'
-# Network definition for the big-bear-odoo application
 networks:
   big_bear_odoo_network:
-    driver: bridge # Specifies network driver as bridge
+    driver: bridge
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-odoo
-  # Detailed description for the application
   description:
     en_us: Open-source business management software suite designed to streamline various aspects of business operations. With its modular structure, users can choose and integrate specific applications such as accounting, inventory, and sales. Odoo provides a user-friendly interface, scalability for businesses of all sizes, and is available in both community (free) and enterprise editions. Its integrated approach and customization options make it a popular choice for comprehensive ERP (Enterprise Resource Planning) solutions.
-  # Brief tagline for the application
   tagline:
     en_us: Open-source business management software with modular applications for streamlined operations.
-  # Developer's information
   developer: odoo
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps/apps/odoo/logo.jpg
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Documentation: https://community.bigbeartechworld.com/t/added-odoo-to-bigbearcasaos/1115?u=dragonfire1119
-  # Title for the application
   title:
     en_us: Odoo
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8069"
+  port_map: '8069'
+

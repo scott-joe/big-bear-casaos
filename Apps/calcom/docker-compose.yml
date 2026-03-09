@@ -1,19 +1,9 @@
-# Configuration for calcom setup
-
-# Name of the big-bear-calcom application
 name: big-bear-calcom
-# Service definitions for the big-bear-calcom application
 services:
-  # Service name: big-bear-calcom
-  # The `big-bear-calcom` service definition
   big-bear-calcom:
-    # Name of the container
     container_name: big-bear-calcom
-    # Image to be used for the container
     image: calcom/cal.com:v6.2.0
-    # Container restart policy
     restart: unless-stopped
-    # Environment variables
     environment:
       - DATABASE_HOST=big-bear-calcom-db
       - DATABASE_URL=postgresql://bigbear:9e45944b-37bb-41f7-aa6f-b74195fb58ec@big-bear-calcom-db/bigbear_calcom
@@ -37,13 +27,11 @@ services:
       - EMAIL_SERVER_PASSWORD=
       - EMAIL_SERVER_USER=
       - NODE_ENV=production
-    # Volumes to be mounted to the container
     volumes:
-      - /DATA/AppData/$AppID/config:/config
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/config:/config
     ports:
-      - 3000:3000
-      - 3001:3001
+      - '12011:3000'
+      - '3001:3001'
     networks:
       - big_bear_calcom_network
     x-casaos:
@@ -119,10 +107,10 @@ services:
           description:
             en_us: 'Container Path: /config'
       ports:
-        - container: "3000"
+        - container: '3000'
           description:
             en_us: 'Container Port: 3000'
-        - container: "3001"
+        - container: '3001'
           description:
             en_us: 'Container Port: 3001'
   big-bear-calcom-db:
@@ -130,7 +118,7 @@ services:
     image: postgres:16.1
     restart: on-failure
     volumes:
-      - /DATA/AppData/$AppID/data/db:/var/lib/postgresql/data
+      - /DATA/.docker/AppData/$AppID/data/db:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=9e45944b-37bb-41f7-aa6f-b74195fb58ec
       - POSTGRES_USER=bigbear
@@ -156,38 +144,27 @@ networks:
   big_bear_calcom_network:
     driver: bridge
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-calcom
-  # Detailed description for the application
   description:
     en_us: |-
       The open source Calendly successor. You are in charge of your own data, workflow, and appearance.
       Calendly and other scheduling tools are awesome. It made our lives massively easier. We're using it for business meetings, seminars, yoga classes, and even calls with our families. However, most tools are very limited in terms of control and customization.
           That's where Cal.com comes in. Self-hosted or hosted by us. White-label by design. API-driven and ready to be deployed on your own domain. Full control of your events and data.
-  # Brief tagline for the application
   tagline:
     en_us: Cal.com
-  # Developer's information
   developer: calcom
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps/apps/calcom/logo.jpg
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Read this before installing: https://community.bigbeartechworld.com/t/added-cal-com-to-bigbearcasaos/1873#p-3510-documentation-4
-  # Title for the application
   title:
     en_us: Cal.com
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "3000"
+  port_map: '12011'
+

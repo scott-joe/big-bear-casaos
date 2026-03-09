@@ -1,21 +1,14 @@
-# Configuration for big-bear-vikunja setup
-
-# Name of the big-bear-vikunja application
 name: big-bear-vikunja
-# Service definitions for the big-bear-vikunja application
 services:
   vikunja:
     image: vikunja/vikunja:1.1.0
     container_name: big-bear-vikunja
     ports:
-      - 8081:3456
+      - '8081:3456'
     volumes:
-      # Map container path to host path for files
-      - /DATA/AppData/$AppID/files:/app/vikunja/files
+      - /DATA/.docker/AppData/$AppID/files:/app/vikunja/files
     environment:
-      # Set the Vikunja frontend URL, replace <your public frontend url with slash> with the actual URL
       VIKUNJA_SERVICE_PUBLICURL: http://<your public frontend url with slash>/
-      # Vikunja API environment variables
       VIKUNJA_DATABASE_HOST: vikunja-db
       VIKUNJA_DATABASE_PASSWORD: secret
       VIKUNJA_DATABASE_TYPE: mysql
@@ -55,24 +48,22 @@ services:
           description:
             en_us: 'Container Path: /app/vikunja/files'
       ports:
-        - container: "3456"
+        - container: '3456'
           description:
             en_us: 'Container Port: 3456'
   vikunja-db:
     image: mariadb:10
     container_name: vikunja-db
     command:
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_unicode_ci
+      - '--character-set-server=utf8mb4'
+      - '--collation-server=utf8mb4_unicode_ci'
     environment:
-      # MariaDB environment variables
       MYSQL_ROOT_PASSWORD: supersecret
       MYSQL_USER: vikunja
       MYSQL_PASSWORD: secret
       MYSQL_DATABASE: vikunja
     volumes:
-      # Map container path to host path for MariaDB data
-      - /DATA/AppData/$AppID/mysql:/var/lib/mysql
+      - /DATA/.docker/AppData/$AppID/mysql:/var/lib/mysql
     restart: unless-stopped
     networks:
       - vikunja-network
@@ -98,30 +89,20 @@ networks:
   vikunja-network:
     driver: bridge
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: vikunja
-  # Detailed description for the application
   description:
     en_us: The open-source, self-hostable to-do app. Organize everything, on all platforms.
-  # Brief tagline for the application
   tagline:
     en_us: Vikunja
-  # Developer's information
   developer: kolaente
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/vikunja.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Vikunja
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8081"
+  port_map: '8081'
+

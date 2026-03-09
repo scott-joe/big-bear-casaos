@@ -1,36 +1,19 @@
-# Docker Compose configuration for BeaverHabits Service
-# This service provides a web interface for managing habits
-# Version: 0.5.2
-
-# Name of the big-bear-beaverhabits application
 name: big-bear-beaverhabits
-# Service definitions for the big-bear-beaverhabits application
 services:
-  # Main service configuration for the BeaverHabits application
-  # This service provides a web interface running on port 8080 for habit administration
   big-bear-beaverhabits:
-    # Name of the container
     container_name: big-bear-beaverhabits
-    # Image to be used for the container specifies the btop version and source
     image: daya0576/beaverhabits:0.9.0
-    # Container restart policy - restarts the container unless manually stopped
     restart: unless-stopped
-    user: "1000:1000"
-    # Environment variables for service configuration
-    # These settings control the Flask application behavior and default admin credentials
+    user: '1000:1000'
     environment:
       - HABITS_STORAGE=USER_DISK
       - TRUSTED_LOCAL_EMAIL=your@email.com
       - INDEX_HABIT_DATE_COLUMNS=5
       - ENABLE_IOS_STANDALONE=true
-    # Volume mappings required for system integration
-    # These mounts allow the container to interact with the host system
     volumes:
-      # Required for monitoring system resources and container metrics
-      - /DATA/AppData/$AppID/.user:/app/.user/
-    # Map port 8080 on the host to port 8080 on the container
+      - /DATA/.docker/AppData/$AppID/.user:/app/.user/
     ports:
-      - "8080:8080"
+      - '12006:8080'
     x-casaos:
       envs:
         - container: HABITS_STORAGE
@@ -50,44 +33,32 @@ services:
           description:
             en_us: 'Container Path: /app/.user/'
       ports:
-        - container: "8080"
+        - container: '8080'
           description:
             en_us: 'Container Port: 8080'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-beaverhabits
-  # Detailed description for the application
   description:
     en_us: A self-hosted habit tracking app without Goals
-  # Screenshot links for the application
   screenshot_link:
     - https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps@main/apps/beaverhabits/screenshots/screenshot-1.png
     - https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps@main/apps/beaverhabits/screenshots/screenshot-2.png
     - https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps@main/apps/beaverhabits/screenshots/screenshot-3.png
-  # Brief tagline for the application
   tagline:
     en_us: A self-hosted habit tracking app without Goals
-  # Developer's information
   developer: daya0576
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/beaver-habit-tracker.png
-  # Thumbnail image for the application (if any)
   thumbnail: https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps/apps/beaverhabits/thumbnail.png
-  # Installation tips
   tips:
     before_install:
       en_us: |
         Read this before installing: https://community.bigbeartechworld.com/t/added-beaverhabits-to-bigbearcasaos/3345?u=dragonfire1119
-  # Title for the application
   title:
     en_us: Beaver Habit Tracker
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8080"
+  port_map: '12006'
+

@@ -1,24 +1,13 @@
 name: big-bear-pingvin-share
 services:
-  # Defines a set of services to be run together
   app:
-    # Name of the service
     image: stonith404/pingvin-share:v1.13.0
-    # Image to be used for this service
-
     restart: unless-stopped
-    # Service will always restart unless it's manually stopped
-
     ports:
-      # Port mapping between host and container
-      - 3000:3000
-      # Maps port 3000 on the host to port 3000 in the container
+      - '12120:3000'
     volumes:
-      # Defines volume mounts for the service
-      - "/DATA/AppData/pingvin-share/data:/opt/app/backend/data"
-      # Maps data directory from host to container's backend data directory
-      - "/DATA/AppData/pingvin-share/images:/opt/app/frontend/public/img"
-      # Maps images directory from host to container's frontend public img directory
+      - /DATA/.docker/AppData/pingvin-share/data:/opt/app/backend/data
+      - /DATA/.docker/AppData/pingvin-share/images:/opt/app/frontend/public/img
     x-casaos:
       volumes:
         - container: /opt/app/backend/data
@@ -28,34 +17,24 @@ services:
           description:
             en_us: 'Container Path: /opt/app/frontend/public/img'
       ports:
-        - container: "3000"
+        - container: '3000'
           description:
             en_us: 'Container Port: 3000'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: Pingvin Share is self-hosted file sharing platform and an alternative for WeTransfer.
-  # Brief tagline for the application
   tagline:
     en_us: Pingvin Share
-  # Developer's information
   developer: stonith404
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/pingvin-share.png
-  # Thumbnail image for the application (if any)
   thumbnail: https://user-images.githubusercontent.com/58886915/225038319-b2ef742c-3a74-4eb6-9689-4207a36842a4.png
-  # Title for the application
   title:
     en_us: Pingvin Share
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "3000"
+  port_map: '12120'
+

@@ -1,29 +1,17 @@
-# Configuration for obsidian-livesync setup
-
-# Name of the big-bear-obsidian-livesync application
 name: big-bear-obsidian-livesync
-# Service definitions for the big-bear-obsidian-livesync application
 services:
-  # Service name: app
-  # The `app` service definition
   app:
-    # Name of the container
     container_name: obsidian-livesync
-    # Image to be used for the container
     image: couchdb:3.5.0
-    # Container restart policy
     restart: unless-stopped
-    # Volumes to be mounted to the container
     volumes:
-      - /DATA/AppData/$AppID/data/couchdb:/opt/couchdb/data
-      - /DATA/AppData/$AppID/data/local.ini:/opt/couchdb/etc/local.ini
+      - /DATA/.docker/AppData/$AppID/data/couchdb:/opt/couchdb/data
+      - /DATA/.docker/AppData/$AppID/data/local.ini:/opt/couchdb/etc/local.ini
     environment:
       - COUCHDB_USER=casaos
       - COUCHDB_PASSWORD=casaos
-    # Ports mapping between host and container
     ports:
-      # Mapping port 5984 of the host to port 5984 of the container
-      - "5984:5984"
+      - '5984:5984'
     x-casaos:
       envs:
         - container: COUCHDB_USER
@@ -40,31 +28,22 @@ services:
           description:
             en_us: 'Container Path: /opt/couchdb/etc/local.ini'
       ports:
-        - container: "5984"
+        - container: '5984'
           description:
             en_us: 'Container Port: 5984'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: Self-hosted database for synchronizing Obsidian vaults.
-  # Brief tagline for the application
   tagline:
     en_us: Self-hosted database for synchronizing Obsidian vaults.
-  # Developer's information
   developer: couchdb
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/obsidian.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
@@ -77,10 +56,8 @@ x-casaos:
         Video Tutorial: https://youtu.be/-n1abMPLmFg
 
         After running this script, you need to restart the container.
-  # Title for the application
   title:
     en_us: Obsidian Livesync
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "5984"
+  port_map: '5984'
+

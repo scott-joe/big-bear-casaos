@@ -1,25 +1,13 @@
-# Configuration for nextcloud setup
-
-# Name of the big-bear-nextcloud application
 name: big-bear-nextcloud
-# Service definitions for the big-bear-nextcloud application
 services:
-  # Service name: app
-  # The `app` service definition
   nextcloud:
-    # Define the container name
     container_name: nextcloud
-    # Use the nextcloud image from the official Docker Hub
     image: bigbeartechworld/big-bear-nextcloud-with-smbclient:33.0.0
-    # Restart the container unless stopped
     restart: unless-stopped
-    # Map port 7580 on the host to port 80 on the container
     ports:
-      - 7580:80
-    # Mount the nextcloud_html directory on the host to /var/www/html in the container
+      - '7580:80'
     volumes:
-      - /DATA/AppData/$AppID/html:/var/www/html
-    # Set environment variables for the container
+      - /DATA/.docker/AppData/$AppID/html:/var/www/html
     environment:
       - POSTGRES_HOST=db-nextcloud
       - REDIS_HOST=redis-nextcloud
@@ -32,13 +20,11 @@ services:
       - OVERWRITEPROTOCOL=http
       - PHP_MEMORY_LIMIT=1024M
       - PHP_UPLOAD_LIMIT=1024M
-    # Specify the dependencies
     depends_on:
       db-nextcloud:
         condition: service_healthy
       redis-nextcloud:
         condition: service_healthy
-    # Define the network
     networks:
       - nextcloud_network
     x-casaos:
@@ -81,25 +67,25 @@ services:
           description:
             en_us: 'Container Path: /var/www/html'
       ports:
-        - container: "80"
+        - container: '80'
           description:
             en_us: 'Container Port: 80'
-  # Define the database container for Nextcloud
   db-nextcloud:
     container_name: db-nextcloud
     image: postgres:14.2
     restart: unless-stopped
     volumes:
-      - /DATA/AppData/$AppID/pgdata:/var/lib/postgresql/data # Mount the PostgreSQL data directory
+      - /DATA/.docker/AppData/$AppID/pgdata:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=casaos # Set the PostgreSQL password
-      - POSTGRES_USER=casaos # Set the PostgreSQL username
-      - POSTGRES_DB=nextcloud # Set the name of the Nextcloud database
+      - POSTGRES_PASSWORD=casaos
+      - POSTGRES_USER=casaos
+      - POSTGRES_DB=nextcloud
     networks:
-      - nextcloud_network # Connect to the Nextcloud network
-    # Healthcheck configuration for the database service
+      - nextcloud_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U casaos -d nextcloud"]
+      test:
+        - CMD-SHELL
+        - pg_isready -U casaos -d nextcloud
       interval: 10s
       timeout: 5s
       retries: 5
@@ -118,19 +104,19 @@ services:
         - container: /var/lib/postgresql/data
           description:
             en_us: 'Container Path: /var/lib/postgresql/data'
-  # Redis configuration for Nextcloud
   redis-nextcloud:
     container_name: redis-nextcloud
-    user: "1000:1000"
+    user: '1000:1000'
     image: redis:6.2.20@sha256:d06ff6ec778c7f2a5c0dfaf58141d598efaa50a89d0e966faedfdf122cef451b
     restart: unless-stopped
     volumes:
-      - "/DATA/AppData/$AppID/redis:/data" # Mount the Redis data directory
+      - /DATA/.docker/AppData/$AppID/redis:/data
     networks:
-      - nextcloud_network # Connect to the Nextcloud network
-    # Healthcheck configuration for the Redis service
+      - nextcloud_network
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli ping || exit 1"]
+      test:
+        - CMD-SHELL
+        - redis-cli ping || exit 1
       interval: 10s
       timeout: 5s
       retries: 5
@@ -143,60 +129,46 @@ services:
     image: bigbeartechworld/big-bear-nextcloud-with-smbclient:33.0.0
     restart: unless-stopped
     volumes:
-      - /DATA/AppData/$AppID/html:/var/www/html
+      - /DATA/.docker/AppData/$AppID/html:/var/www/html
     entrypoint: /cron.sh
-    # Specify the dependencies
     depends_on:
       db-nextcloud:
         condition: service_healthy
       redis-nextcloud:
         condition: service_healthy
     networks:
-      - nextcloud_network # Connect to the Nextcloud network
+      - nextcloud_network
     x-casaos:
       volumes:
         - container: /var/www/html
           description:
             en_us: 'Container Path: /var/www/html'
-# Network definition for the big-bear-nextcloud application
 networks:
   nextcloud_network:
     driver: bridge
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: nextcloud
-  # Detailed description for the application
   description:
     en_us: Nextcloud puts your data at your fingertips, under your control. Store your documents, calendar, contacts and photos on a server at home, at one of our providers or in a data center you trust.
-  # Screenshot links for the application
   screenshot_link:
     - https://cdn.jsdelivr.net/gh/IceWhaleTech/CasaOS-AppStore@main/Apps/Nextcloud/screenshot-1.png
     - https://cdn.jsdelivr.net/gh/IceWhaleTech/CasaOS-AppStore@main/Apps/Nextcloud/screenshot-2.png
     - https://cdn.jsdelivr.net/gh/IceWhaleTech/CasaOS-AppStore@main/Apps/Nextcloud/screenshot-3.png
-  # Brief tagline for the application
   tagline:
     en_us: The productivity platform that keeps you in control
-  # Developer's information
   developer: nextcloud
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/nextcloud.png
-  # Thumbnail image for the application (if any)
   thumbnail: https://cdn.jsdelivr.net/gh/IceWhaleTech/CasaOS-AppStore@main/Apps/Nextcloud/thumbnail.jpg
-  # Installation tips
   tips:
     before_install:
       en_us: |
         Read the [Nextcloud installation guide](https://community.bigbeartechworld.com/t/added-nextcloud-to-bigbearcasaos/455?u=dragonfire1119)
-  # Title for the application
   title:
     en_us: Nextcloud
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "7580"
+  port_map: '7580'
+

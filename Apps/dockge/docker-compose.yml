@@ -1,30 +1,17 @@
-# Configuration for dockge setup
-
-# Name of the big-bear-dockge application
 name: big-bear-dockge
-# Service definitions for the big-bear-dockge application
 services:
-  # Service name: app
-  # The `app` service definition
   app:
-    # Name of the container
     container_name: big-bear-dockge
-    # Image to be used for the container
     image: louislam/dockge:1.5.0
-    # Environment variables
     environment:
-      # Tell Dockge where is your stacks directory
-      DOCKGE_STACKS_DIR: "/DATA/AppData/big-bear-dockge/stacks"
-    # Container restart policy
+      DOCKGE_STACKS_DIR: /DATA/.docker/AppData/big-bear-dockge/stacks
     restart: unless-stopped
-    # Volumes to be mounted to the container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /DATA/AppData/$AppID/data:/app/data
-      - /DATA/AppData/$AppID/stacks:/DATA/AppData/big-bear-dockge/stacks
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/data:/app/data
+      - /DATA/.docker/AppData/$AppID/stacks:/DATA/AppData/big-bear-dockge/stacks
     ports:
-      - 5001:5001
+      - '5001:5001'
     x-casaos:
       envs:
         - container: DOCKGE_STACKS_DIR
@@ -41,34 +28,24 @@ services:
           description:
             en_us: 'Container Path: /DATA/AppData/big-bear-dockge/stacks'
       ports:
-        - container: "5001"
+        - container: '5001'
           description:
             en_us: 'Container Port: 5001'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: A fancy, easy-to-use and reactive docker `compose.yaml` stack-oriented manager
-  # Brief tagline for the application
   tagline:
     en_us: Dockge
-  # Developer's information
   developer: louislam
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/dockge.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Dockge
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "5001"
+  port_map: '5001'
+

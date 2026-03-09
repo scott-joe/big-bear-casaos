@@ -1,44 +1,22 @@
-# Configuration for filebrowser setup
-
-# Name of the big-bear-filebrowser application
 name: big-bear-filebrowser
-# Service definitions for the big-bear-filebrowser application
 services:
-  # Service name: big-bear-filebrowser
-  # The `big-bear-filebrowser` service definition
   big-bear-filebrowser:
-    # Name of the container
     container_name: big-bear-filebrowser
-    # Image to be used for the container
     image: filebrowser/filebrowser:v2.61.0-s6
-    # Container restart policy
     restart: unless-stopped
-    # Environment variables
     environment:
-      # User ID to run the container with
       - PUID=0
-      # Group ID to run the container with
       - PGID=0
-    # Volumes to be mounted to the container
     volumes:
-      # Volume mapping for the app data from CasaOS
       - /DATA/AppData:/srv/app-data
-      # Volume mapping for the Documents files from CasaOS
       - /DATA/Documents:/srv/documents
-      # Volume mapping for the Downloads files from CasaOS
-      - /DATA/Downloads:/srv/downloads
-      # Volume mapping for the Gallery files from CasaOS
+      - /media/Safe-Storage/Library/Downloads:/srv/downloads
       - /DATA/Gallery:/srv/gallery
-      # Volume mapping for the media files from CasaOS
-      - /DATA/media:/srv/media
-      # Volume mapping for the database files for filebrowser
-      - /DATA/AppData/$AppID/data/db:/database
-      # Volume mapping for the config files for filebrowser
-      - /DATA/AppData/$AppID/data/config:/config
-    # Ports mapping between host and container
+      - /media/Safe-Storage/Library:/srv/media
+      - /DATA/.docker/AppData/$AppID/data/db:/database
+      - /DATA/.docker/AppData/$AppID/data/config:/config
     ports:
-      # Mapping port 8080 of the host to port 8080 of the container
-      - "8080:80"
+      - '12030:80'
     x-casaos:
       envs:
         - container: PUID
@@ -70,39 +48,28 @@ services:
           description:
             en_us: 'Container Path: /config'
       ports:
-        - container: "80"
+        - container: '80'
           description:
             en_us: 'Container Port: 80'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-filebrowser
-  # Detailed description for the application
   description:
     en_us: Reliable and Performant File Management Desktop Sync and File Sharing Tool.
-  # Brief tagline for the application
   tagline:
     en_us: Access your homeserver files from your browser
-  # Developer's information
   developer: filebrowser
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/file-browser.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Read this before installing: https://community.bigbeartechworld.com/t/added-filebrowser-to-bigbearcasaos/1934#p-3590-documentation-4
-  # Title for the application
   title:
     en_us: Filebrowser
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8080"
+  port_map: '12030'
+

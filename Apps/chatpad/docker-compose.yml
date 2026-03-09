@@ -1,52 +1,31 @@
-# Configuration for chatpad setup
-
-# Name of the big-bear-chatpad application
 name: big-bear-chatpad
-# Service definitions for the big-bear-chatpad application
 services:
-  # Service name: chatpad
-  # The `chatpad` service definition
   big-bear-chatpad:
-    # Name of the container
     container_name: big-bear-chatpad
-    # Image to be used for the container
     image: ghcr.io/deiucanta/chatpad:f45cd53bc410412610c1ba1cbd84cd137d8e167d
-    # Container restart policy
     restart: unless-stopped
-    # Ports mapping between host and container
     ports:
-      # Mapping port 8080 of the host to port 80 of the container
-      - "8080:80"
+      - '12013:80'
     x-casaos:
       ports:
-        - container: "80"
+        - container: '80'
           description:
             en_us: 'Container Port: 80'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-chatpad
-  # Detailed description for the application
   description:
     en_us: Recently, there has been a surge of UIs for ChatGPT, making it the new to-do app that everyone wants to try their hand at. Chatpad sets itself apart with a broader vision - to become the ultimate interface for ChatGPT users.
-  # Brief tagline for the application
   tagline:
     en_us: Not just another ChatGPT user-interface!
-  # Developer's information
   developer: deiucanta
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps/apps/chatpad/logo.jpeg
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Chatpad
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8080"
+  port_map: '12013'
+

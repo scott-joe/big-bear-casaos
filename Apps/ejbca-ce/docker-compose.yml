@@ -1,29 +1,14 @@
-# Configuration for ejbca-ce setup
-
-# Name of the big-bear-ejbca-ce application
 name: big-bear-ejbca-ce
-# Service definitions for the big-bear-ejbca-ce application
 services:
-  # Service name: app
-  # The `app` service definition
   big-bear-ejbca-ce:
-    # Name of the container
     container_name: big-bear-ejbca-ce
-    # Image to be used for the container
     image: keyfactor/ejbca-ce:9.3.7
-    # Container restart policy
     restart: unless-stopped
-    # Volumes to be mounted to the container
     volumes:
-      # Mounting the local ejbca-ce/persistent directory to /mnt/persistent inside the container
-      - /DATA/AppData/$AppID/persistent:/mnt/persistent
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/persistent:/mnt/persistent
     ports:
-      # Mapping port 8080 of the host to port 8080 of the container
-      - "8080:8080"
-      # Mapping port 8443 of the host to port 8443 of the container
-      - "8443:8443"
-    # Environment variables
+      - '12025:8080'
+      - '12026:8443'
     environment:
       - TLS_SETUP_ENABLED=simple
     x-casaos:
@@ -36,33 +21,24 @@ services:
           description:
             en_us: 'Container Path: /mnt/persistent'
       ports:
-        - container: "8080"
+        - container: '8080'
           description:
             en_us: 'Container Port: 8080'
-        - container: "8443"
+        - container: '8443'
           description:
             en_us: 'Container Port: 8443'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
-  # Main service for this application
   main: big-bear-ejbca-ce
-  # Detailed description for the application
   description:
     en_us: The open-source public key infrastructure (PKI) and certificate authority (CA) software EJBCA is one of the longest running CA software projects. EJBCA covers all your needs - from certificate enrollment, via certificate management, to certificate validation.
-  # Brief tagline for the application
   tagline:
     en_us: The open-source public key infrastructure (PKI) and certificate authority (CA)
-  # Developer's information
   developer: Keyfactor
-  # Author of this particular configuration
   author: BigBearCommunity
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/Keyfactor/ejbca-ce/.github/images/community-ejbca-icon.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
@@ -70,10 +46,8 @@ x-casaos:
         Default admin URL: https://<host/ip>:8443/ejbca/adminweb
         Default HTTP port: 8080
         For more information on custom setup visit: https://github.com/Keyfactor/ejbca-ce
-  # Title for the application
   title:
     en_us: EJBCA Community
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8443"
+  port_map: '12025'
+

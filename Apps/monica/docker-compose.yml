@@ -1,17 +1,8 @@
-# Configuration for monica setup
-
-# Name of the big-bear-monica application
 name: big-bear-monica
-# Service definitions for the big-bear-monica application
 services:
-  # Service name: big-bear-monica
-  # The `big-bear-monica` service definition
   big-bear-monica:
-    # Name of the container
     container_name: big-bear-monica
-    # Image to be used for the container
     image: monica:4.1.2
-    # Container restart policy
     restart: unless-stopped
     environment:
       - APP_KEY=80356f7073c4f7834187b25a9d32cd2a
@@ -19,12 +10,9 @@ services:
       - DB_USERNAME=usermonica
       - DB_PASSWORD=passwordmonica
     volumes:
-      - /DATA/AppData/$AppID/storage:/var/www/html/storage
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/storage:/var/www/html/storage
     ports:
-      # Mapping port 8080 of the host to port 80 of the container
-      - "8080:80"
-    # Networks to be attached to the container
+      - '12081:80'
     networks:
       - big_bear_monica_network
     x-casaos:
@@ -46,10 +34,9 @@ services:
           description:
             en_us: 'Container Path: /var/www/html/storage'
       ports:
-        - container: "80"
+        - container: '80'
           description:
             en_us: 'Container Port: 80'
-  # Database service for monica
   big-bear-monica-db:
     image: mariadb:10.6.11
     container_name: big-bear-monica-db
@@ -60,7 +47,7 @@ services:
       - MARIADB_USER=usermonica
       - MARIADB_PASSWORD=passwordmonica
     volumes:
-      - /DATA/AppData/$AppID/mysql:/var/lib/mysql
+      - /DATA/.docker/AppData/$AppID/mysql:/var/lib/mysql
     restart: unless-stopped
     networks:
       - big_bear_monica_network
@@ -85,35 +72,24 @@ services:
         - container: /var/lib/mysql
           description:
             en_us: 'Container Path: /var/lib/mysql'
-# Networks used by the application
 networks:
   big_bear_monica_network:
     driver: bridge
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-monica
-  # Detailed description for the application
   description:
     en_us: Monica is an open-source web application to organize and record your interactions with your loved ones. We call it a PRM, or Personal Relationship Management. Think of it as a CRM (a popular tool used by sales teams in the corporate world) for your friends or family.
-  # Brief tagline for the application
   tagline:
     en_us: A Personal Relationship Management tool to help you document your social life.
-  # Developer's information
   developer: monica
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/monica.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Monica
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8080"
+  port_map: '12081'
+

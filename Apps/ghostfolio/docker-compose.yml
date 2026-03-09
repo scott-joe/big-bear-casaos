@@ -1,19 +1,13 @@
-# Configuration for Ghostfolio setup using Docker Compose
-
-# Name of the Ghostfolio application stack
 name: big-bear-ghostfolio
-# Definitions of services within the Ghostfolio application stack
 services:
-  # Service definition for the Ghostfolio application
   big-bear-ghostfolio:
-    container_name: big-bear-ghostfolio # Unique name for the container instance
-    image: ghostfolio/ghostfolio:2.246.0 # Docker image to use
-    restart: unless-stopped # Policy to restart the container unless manually stopped
-    environment: # Environment variables for configuration
-      NODE_ENV: production # Node environment setting (production, development, etc.)
-      HOST: "0.0.0.0" # Host interface the app binds to (0.0.0.0 for all interfaces)
-      PORT: "3333" # The port on which the app listens
-      # Security and database settings:
+    container_name: big-bear-ghostfolio
+    image: ghostfolio/ghostfolio:2.246.0
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: '3333'
       ACCESS_TOKEN_SALT: 5a7f9e0d-0e64-4c19-8279-bbe8b4c590f4
       DATABASE_URL: postgresql://ghostfolio:casaospassword@big-bear-ghostfolio-db:5432/ghostfolio?sslmode=prefer
       JWT_SECRET_KEY: 534e820d-da30-4dd3-baf9-0511847c478a
@@ -22,16 +16,16 @@ services:
       POSTGRES_PASSWORD: casaospassword
       REDIS_HOST: big-bear-ghostfolio-redis
       REDIS_PASSWORD: casaosredispassword
-      REDIS_PORT: "6379"
+      REDIS_PORT: '6379'
     ports:
-      - "3333:3333" # Maps port 3333 on the host to port 3333 on the container
-    depends_on: # Dependency definitions ensuring database and Redis are ready
+      - '12038:3333'
+    depends_on:
       big-bear-ghostfolio-db:
         condition: service_healthy
       big-bear-ghostfolio-redis:
         condition: service_healthy
     networks:
-      - big_bear_ghostfolio_network # Connects the service to the defined network
+      - big_bear_ghostfolio_network
     x-casaos:
       envs:
         - container: NODE_ENV
@@ -71,28 +65,29 @@ services:
           description:
             en_us: 'Container Variable: REDIS_PORT'
       ports:
-        - container: "3333"
+        - container: '3333'
           description:
             en_us: 'Container Port: 3333'
-  # PostgreSQL database service for Ghostfolio
   big-bear-ghostfolio-db:
     container_name: big-bear-ghostfolio-db
-    image: postgres:15.4-alpine # Using PostgreSQL 15.4 on Alpine Linux
+    image: postgres:15.4-alpine
     restart: unless-stopped
-    environment: # Database configuration settings
+    environment:
       POSTGRES_DB: ghostfolio
       POSTGRES_USER: ghostfolio
       POSTGRES_PASSWORD: casaospassword
-      PGDATA: /var/lib/postgresql/data # Data directory inside the container
-    healthcheck: # Health check to ensure database service is ready
-      test: ["CMD-SHELL", "pg_isready -d ghostfolio -U ghostfolio"]
+      PGDATA: /var/lib/postgresql/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -d ghostfolio -U ghostfolio
       interval: 10s
       timeout: 5s
       retries: 5
-    volumes: # Persistent volume mapping for database data
-      - /DATA/AppData/$AppID/data/db:/var/lib/postgresql/data
+    volumes:
+      - /DATA/.docker/AppData/$AppID/data/db:/var/lib/postgresql/data
     networks:
-      - big_bear_ghostfolio_network # Connects the service to the defined network
+      - big_bear_ghostfolio_network
     x-casaos:
       envs:
         - container: POSTGRES_DB
@@ -111,58 +106,48 @@ services:
         - container: /var/lib/postgresql/data
           description:
             en_us: 'Container Path: /var/lib/postgresql/data'
-  # Redis service for Ghostfolio, used for caching and session storage
   big-bear-ghostfolio-redis:
     container_name: big-bear-ghostfolio-redis
-    image: redis:7.4.6-alpine@sha256:7a7c6b5c49a6896d0a58ee0c6dc0dcabe14f30f0a2f7d2d1362d276fa2d43166 # Using Redis 7 on Alpine Linux
+    image: redis:7.4.6-alpine@sha256:7a7c6b5c49a6896d0a58ee0c6dc0dcabe14f30f0a2f7d2d1362d276fa2d43166
     restart: unless-stopped
-    command: >
+    command: |
       --requirepass casaosredispassword
-
-    healthcheck: # Health check to ensure Redis service is ready
-      test: ["CMD", "redis-cli", "ping"]
+    healthcheck:
+      test:
+        - CMD
+        - redis-cli
+        - ping
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 30s
-    volumes: # Persistent volume mapping for Redis data
-      - /DATA/AppData/$AppID/data/redis:/data
+    volumes:
+      - /DATA/.docker/AppData/$AppID/data/redis:/data
     networks:
-      - big_bear_ghostfolio_network # Connects the service to the defined network
+      - big_bear_ghostfolio_network
     x-casaos:
       volumes:
         - container: /data
           description:
             en_us: 'Container Path: /data'
-# Network definition for inter-service communication
 networks:
   big_bear_ghostfolio_network:
-    driver: bridge # Uses a bridge network for container communication
+    driver: bridge
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-ghostfolio
-  # Detailed description for the application
   description:
-    en_us: "Open Source Wealth Management Software. Angular + NestJS + Prisma + Nx + TypeScript \U0001F90D"
-  # Brief tagline for the application
+    en_us: Open Source Wealth Management Software. Angular + NestJS + Prisma + Nx + TypeScript 🤍
   tagline:
     en_us: Ghostfolio
-  # Developer's information
   developer: ghostfolio
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/ghostfolio.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Ghostfolio
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "3333"
+  port_map: '12038'
+

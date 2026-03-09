@@ -1,51 +1,30 @@
-# Configuration for playitgg setup
-
-# Name of the big-bear-playitgg application
 name: big-bear-playitgg
-# Service definitions for the big-bear-playitgg application
 services:
-  # Service name: app
-  # The `app` service definition
   app:
-    # Name of the container
     container_name: playitgg
-    # Image to be used for the container
     image: dysta/playitgg:1.2.0
-    # Container restart policy
     restart: unless-stopped
-    # Volumes to be mounted to the container
     volumes:
-      # Mounting the local playitgg directory to /secrets inside the container
-      - /DATA/AppData/$AppID/secrets:/secrets
+      - /DATA/.docker/AppData/$AppID/secrets:/secrets
     x-casaos:
       volumes:
         - container: /secrets
           description:
             en_us: 'Container Path: /secrets'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: playit.gg is a global proxy that allows anyone to host a server without port forwarding. We use tunneling. Only the server needs to run the program, not every player!
-  # Brief tagline for the application
   tagline:
     en_us: playit.gg is a global proxy that allows anyone to host a server without port forwarding. We use tunneling. Only the server needs to run the program, not every player!
-  # Developer's information
   developer: Dysta
-  # Author of this particular configuration
   author: BigBearCommunity
-  # Icon URL for the application
   icon: https://media.forgecdn.net/avatars/848/399/638248438568793075.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: playit.gg
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: ""
+  port_map: ''
+

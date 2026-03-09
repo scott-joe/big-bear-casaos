@@ -1,16 +1,11 @@
-# Configuration for reactive resume setup
-
-# Name of the big-bear-reactive-resume application
 name: big-bear-reactive-resume
-# Service definitions for the big-bear-reactive-resume application
 services:
-  # Main application
   app:
     container_name: big-bear-reactive-resume
     image: amruthpillai/reactive-resume:v5.0.10
     restart: unless-stopped
     ports:
-      - 3000:3000
+      - '12136:3000'
     depends_on:
       - postgres
       - minio
@@ -19,36 +14,24 @@ services:
     networks:
       - reactive-resume-network
     environment:
-      # -- Environment Variables --
-      PORT: "3000"
-      NODE_ENV: "production"
-      # -- URLs --
-      PUBLIC_URL: "http://[CASAOS_IP]:3000"
-      STORAGE_URL: "http://[CASAOS_IP]:9000/default"
-      # -- Printer (Chrome) --
-      CHROME_TOKEN: "chrome_token"
-      CHROME_URL: "ws://chrome:3000"
-      # -- Database (Postgres) --
-      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/postgres"
-      # -- Auth --
-      ACCESS_TOKEN_SECRET: "access_token_secret"
-      REFRESH_TOKEN_SECRET: "refresh_token_secret"
-      # -- Emails --
-      MAIL_FROM: "noreply@localhost"
-      # SMTP_URL: smtp://user:pass@smtp:587 # Optional
-
-      # -- Storage (Minio) --
-      STORAGE_ENDPOINT: "[CASAOS_IP]"
-      STORAGE_PORT: "9000"
-      STORAGE_REGION: "us-east-1" # Optional
-      STORAGE_BUCKET: "default"
-      STORAGE_ACCESS_KEY: "minioadmin"
-      STORAGE_SECRET_KEY: "minioadmin"
-      STORAGE_USE_SSL: "false"
-      # -- Cache (Redis) --
-      REDIS_URL: "redis://default:password@redis:6379"
-      # -- Sentry --
-      # VITE_SENTRY_DSN: https://id.sentry.io # Optional
+      PORT: '3000'
+      NODE_ENV: production
+      PUBLIC_URL: http://[CASAOS_IP]:3000
+      STORAGE_URL: http://[CASAOS_IP]:9000/default
+      CHROME_TOKEN: chrome_token
+      CHROME_URL: ws://chrome:3000
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/postgres
+      ACCESS_TOKEN_SECRET: access_token_secret
+      REFRESH_TOKEN_SECRET: refresh_token_secret
+      MAIL_FROM: noreply@localhost
+      STORAGE_ENDPOINT: '[CASAOS_IP]'
+      STORAGE_PORT: '9000'
+      STORAGE_REGION: us-east-1
+      STORAGE_BUCKET: default
+      STORAGE_ACCESS_KEY: minioadmin
+      STORAGE_SECRET_KEY: minioadmin
+      STORAGE_USE_SSL: 'false'
+      REDIS_URL: redis://default:password@redis:6379
     x-casaos:
       envs:
         - container: PORT
@@ -106,40 +89,23 @@ services:
           description:
             en_us: 'Container Variable: REDIS_URL'
       ports:
-        - container: "3000"
+        - container: '3000'
           description:
             en_us: 'Container Port: 3000'
-  # -- Crowdin (Optional) --
-  # CROWDIN_PROJECT_ID:
-  # CROWDIN_PERSONAL_TOKEN:
-
-  # -- Email (Optional) --
-  # DISABLE_EMAIL_AUTH: true
-  # VITE_DISABLE_SIGNUPS: true
-
-  # -- GitHub (Optional) --
-  # GITHUB_CLIENT_ID: "github_client_id"
-  # GITHUB_CLIENT_SECRET: "github_client_secret"
-  # GITHUB_CALLBACK_URL: "http://[CASAOS_IP]:3000/api/auth/github/callback"
-
-  # -- Google (Optional) --
-  # GOOGLE_CLIENT_ID: "google_client_id"
-  # GOOGLE_CLIENT_SECRET: "google_client_secret"
-  # GOOGLE_CALLBACK_URL: "http://[CASAOS_IP]:3000/api/auth/google/callback"
-
-  # Database (Postgres)
   postgres:
     container_name: big-bear-reactive-resume-db
     image: postgres:15-alpine
     restart: unless-stopped
     volumes:
-      - /DATA/AppData/$AppID/pg/data:/var/lib/postgresql/data
+      - /DATA/.docker/AppData/$AppID/pg/data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: "postgres"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      test:
+        - CMD-SHELL
+        - pg_isready -U postgres -d postgres
       interval: 10s
       timeout: 5s
       retries: 5
@@ -160,19 +126,20 @@ services:
         - container: /var/lib/postgresql/data
           description:
             en_us: 'Container Path: /var/lib/postgresql/data'
-  # Storage (for image uploads)
   minio:
     container_name: big-bear-reactive-resume-minio
     image: minio/minio:RELEASE.2024-09-13T20-26-02Z-cpuv1
-    command: ["server", "/data"]
+    command:
+      - server
+      - /data
     restart: unless-stopped
     ports:
-      - 9000:9000
+      - '12137:9000'
     volumes:
-      - /DATA/AppData/$AppID/minio/data:/data
+      - /DATA/.docker/AppData/$AppID/minio/data:/data
     environment:
-      MINIO_ROOT_USER: "minioadmin"
-      MINIO_ROOT_PASSWORD: "minioadmin"
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
     networks:
       - reactive-resume-network
     x-casaos:
@@ -188,18 +155,17 @@ services:
           description:
             en_us: 'Container Path: /data'
       ports:
-        - container: "9000"
+        - container: '9000'
           description:
             en_us: 'Container Port: 9000'
-  # Chrome Browser (for printing and previews)
   chrome:
     container_name: big-bear-reactive-resume-chrome
     image: browserless/chrome:1.61.1-puppeteer-21.4.1
     restart: unless-stopped
     environment:
-      TOKEN: "chrome_token"
-      EXIT_ON_HEALTH_FAILURE: "true"
-      PRE_REQUEST_HEALTH_CHECK: "true"
+      TOKEN: chrome_token
+      EXIT_ON_HEALTH_FAILURE: 'true'
+      PRE_REQUEST_HEALTH_CHECK: 'true'
     networks:
       - reactive-resume-network
     x-casaos:
@@ -213,49 +179,38 @@ services:
         - container: PRE_REQUEST_HEALTH_CHECK
           description:
             en_us: 'Container Variable: PRE_REQUEST_HEALTH_CHECK'
-  # Redis (for cache & server session management)
   redis:
     container_name: big-bear-reactive-resume-redis
     image: redis:8.2.2-alpine@sha256:1c78f5e7512cc8b22b0edc95c20e7abd9e1fd832e5dfd5c3c6b59ce82fb238d0
     restart: unless-stopped
-    command: ["redis-server", "--requirepass", "password"]
+    command:
+      - redis-server
+      - '--requirepass'
+      - password
     networks:
       - reactive-resume-network
-# Networks used by the application
 networks:
-  # Define the network for AdGuard Home
   reactive-resume-network:
     driver: bridge
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: A free and open-source resume builder that simplifies the process of creating, updating, and sharing your resume.
-  # Brief tagline for the application
   tagline:
     en_us: A free and open-source resume builder
-  # Developer's information
   developer: AmruthPillai
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps/apps/reactive-resume/logo.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Change [CASAOS_IP] to your CasaOS IP address. In the environment variables.
-  # Title for the application
   title:
     en_us: Reactive Resume
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "3000"
+  port_map: '12136'
+

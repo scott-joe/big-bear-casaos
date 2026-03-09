@@ -1,35 +1,18 @@
-# Configuration for ncdu setup
-
-# Name of the big-bear-ncdu application
 name: big-bear-ncdu
-# Service definitions for the big-bear-ncdu application
 services:
-  # Service name: big-bear-ncdu
-  # The `big-bear-ncdu` service definition
   big-bear-ncdu:
-    # Name of the container
     container_name: big-bear-ncdu
-    # Image to be used for the container specifies the ncdu version and source
     image: bigbeartechworld/big-bear-ncdu:0.0.4
-    # Container restart policy - restarts the container unless manually stopped
     restart: unless-stopped
-    # Run the container in privileged mode to allow access to system metrics
     privileged: true
-    # Mount necessary volumes for accessing system information
     volumes:
-      # Mount the host's /proc directory to the container's /proc directory
       - /proc:/proc
-      # Mount the host's /sys directory to the container's /sys directory
       - /sys:/sys
-      # Mount the host's /dev directory to the container's /dev directory
       - /dev:/dev
-      # Mount the host's /etc/localtime file to the container's /etc/localtime file (read-only)
       - /etc/localtime:/etc/localtime:ro
       - /:/casaos
-    # Map port 7681 on the host to port 7681 on the container
     ports:
-      - "7681:7681"
-    # Environment variables to be set in the container for application configuration
+      - '12084:7681'
     environment:
       - NCDU_PATH=/
     x-casaos:
@@ -54,39 +37,28 @@ services:
           description:
             en_us: 'Container Path: /casaos'
       ports:
-        - container: "7681"
+        - container: '7681'
           description:
             en_us: 'Container Port: 7681'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-ncdu
-  # Detailed description for the application
   description:
     en_us: Ncdu is a disk usage analyzer with an ncurses interface. It is designed to find space hogs on a remote server where you don’t have an entire graphical setup available, but it is a useful tool even on regular desktop systems. Ncdu aims to be fast, simple and easy to use, and should be able to run in any minimal POSIX-like environment with ncurses installed. Software made by Yorhel at https://dev.yorhel.nl/ncdu
-  # Brief tagline for the application
   tagline:
     en_us: Ncdu is a disk usage analyzer with an ncurses interface.
-  # Developer's information
   developer: bigbeartechworld
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps/apps/ncdu/logo.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
       en_us: |
         Read this before installing: https://community.bigbeartechworld.com/t/added-ncdu-to-bigbearcasaos/1240?u=dragonfire1119
-  # Title for the application
   title:
     en_us: Ncdu
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "7681"
+  port_map: '12084'
+

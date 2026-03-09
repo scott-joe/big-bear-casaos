@@ -1,19 +1,9 @@
-# Configuration for Portracker setup
-
-# Name of the big-bear-portracker application
 name: big-bear-portracker
-# Service definitions for the big-bear-portracker application
 services:
-  # Service name: big-bear-portracker
-  # The `big-bear-portracker` service definition
   big-bear-portracker:
-    # Name of the container
     container_name: big-bear-portracker
-    # Image to be used for the container
     image: mostafawahied/portracker:1.3
-    # Container restart policy
     restart: unless-stopped
-    # Environment variables for service configuration
     environment:
       - PORT=4999
       - DATABASE_PATH=/data/portracker.db
@@ -22,14 +12,11 @@ services:
       - DISABLE_CACHE=false
       - INCLUDE_UDP=false
       - DEBUG=false
-    # Volumes to be mounted to the container
     volumes:
-      - /DATA/AppData/$AppID/data:/data
+      - /DATA/.docker/AppData/$AppID/data:/data
       - /var/run/docker.sock:/var/run/docker.sock
-    # Ports mapping between host and container
     ports:
-      # Mapping port 4999 of the host to port 4999 of the container
-      - "4999:4999"
+      - '4999:4999'
     x-casaos:
       envs:
         - container: PORT
@@ -61,44 +48,35 @@ services:
           description:
             en_us: 'Container Path: /var/run/docker.sock'
       ports:
-        - container: "4999"
+        - container: '4999'
           description:
             en_us: 'Container Port: 4999'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-portracker
-  # Detailed description for the application
   description:
     en_us: A self-hosted, real-time port monitoring and discovery tool that automatically discovers and maps network services across systems.
-  # Screenshot links for the application
   screenshot_link:
     - https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps@main/apps/portracker/screenshots/screenshot-1.png
     - https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps@main/apps/portracker/screenshots/screenshot-2.png
     - https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps@main/apps/portracker/screenshots/screenshot-3.png
     - https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps@main/apps/portracker/screenshots/screenshot-4.png
-  # Brief tagline for the application
   tagline:
     en_us: Real-time Port Monitoring Tool
-  # Developer's information
   developer: Mostafa-Wahied
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/portracker.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Installation tips
+  thumbnail: ''
   tips:
     before_install:
-      en_us: "Portracker is a self-hosted port monitoring tool that automatically discovers network services.\n                \nRead this before installing: https://community.bigbeartechworld.com/t/added-portracker-to-bigbearcasaos/5003?u=dragonfire1119"
-  # Title for the application
+      en_us: |-
+        Portracker is a self-hosted port monitoring tool that automatically discovers network services.
+                        
+        Read this before installing: https://community.bigbeartechworld.com/t/added-portracker-to-bigbearcasaos/5003?u=dragonfire1119
   title:
     en_us: Portracker
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "4999"
+  port_map: '4999'
+

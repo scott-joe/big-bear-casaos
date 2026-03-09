@@ -1,67 +1,37 @@
-# Configuration for octoprint setup
-
-# Name of the big-bear-octoprint application
 name: big-bear-octoprint
-# Service definitions for the big-bear-octoprint application
 services:
-  # Service name: app
-  # The `app` service definition
   app:
-    # Name of the container
     container_name: octoprint
-    # Image to be used for the container
     image: octoprint/octoprint:1.11.7
-    # Container restart policy
     restart: unless-stopped
-    # devices:
-    # use `python -m serial.tools.miniterm` to see what the name is of the printer, this requires pyserial
-    #  - /dev/ttyACM0:/dev/ttyACM0
-    #  - /dev/video0:/dev/video0
     volumes:
-      - /DATA/AppData/$AppID/octoprint:/octoprint
-    # uncomment the lines below to ensure camera streaming is enabled when
-    # you add a video device
-    #environment:
-    #  - ENABLE_MJPG_STREAMER=true
-
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/octoprint:/octoprint
     ports:
-      # Mapping port 7575 of the host to port 7575 of the container
-      - "1080:80"
+      - '12092:80'
     x-casaos:
       volumes:
         - container: /octoprint
           description:
             en_us: 'Container Path: /octoprint'
       ports:
-        - container: "80"
+        - container: '80'
           description:
             en_us: 'Container Port: 80'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: OctoPrint is the snappy web interface for your 3D printer!
-  # Brief tagline for the application
   tagline:
     en_us: OctoPrint
-  # Developer's information
   developer: octoprint
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/octoprint.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: OctoPrint
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "1080"
+  port_map: '12092'
+

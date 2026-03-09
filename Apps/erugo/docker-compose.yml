@@ -1,60 +1,37 @@
-# Configuration for erugo setup
-
-# Name of the big-bear-erugo application
 name: big-bear-erugo
-# Service definitions for the big-bear-erugo application
 services:
-  # Service name: big-bear-erugo
-  # The `big-bear-erugo` service definition
   big-bear-erugo:
-    # Name of the container
     container_name: big-bear-erugo
-    # Image to be used for the container
     image: wardy784/erugo:0.2.15
-    # Container restart policy
     restart: unless-stopped
-    # Volumes to be mounted to the container
     volumes:
-      # Mounting storage directory to allow erugo to save data
-      - /DATA/AppData/$AppID/storage:/var/www/html/storage
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/storage:/var/www/html/storage
     ports:
-      # Mapping port 9997 of the host to port 80 of the container
-      - "9997:80"
+      - '9997:80'
     x-casaos:
       volumes:
         - container: /var/www/html/storage
           description:
             en_us: 'Container Path: /var/www/html/storage'
       ports:
-        - container: "80"
+        - container: '80'
           description:
             en_us: 'Container Port: 80'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-erugo
-  # Detailed description for the application
   description:
     en_us: A powerful, self-hosted file-sharing platform built with PHP and Laravel with a Vue.js frontend. It offers secure, customizable file-transfer capabilities through an elegant user interface, giving you complete control over your data while providing a seamless experience for both senders and recipients.
-  # Brief tagline for the application
   tagline:
     en_us: A powerful, self-hosted file-sharing platform built with PHP and Laravel with a Vue.js frontend.
-  # Developer's information
   developer: wardy784
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/erugo.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Erugo
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "9997"
+  port_map: '9997'
+

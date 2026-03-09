@@ -1,60 +1,37 @@
-# Configuration for budibase setup
-
-# Name of the big-bear-budibase application
 name: big-bear-budibase
-# Service definitions for the big-bear-budibase application
 services:
-  # Service name: big-bear-budibase
-  # The `big-bear-budibase` service definition
   big-bear-budibase:
-    # Name of the container
     container_name: big-bear-budibase
-    # Image to be used for the container
     image: budibase/budibase:3.31.5
-    # Container restart policy
     restart: unless-stopped
-    # Volumes to be mounted to the container
     volumes:
-      # Mounting the local directory /DATA/AppData/$AppID/data to /data in the container
-      - /DATA/AppData/$AppID/data:/data
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/data:/data
     ports:
-      # Mapping port 80 of the container to port 8080 of the host
-      - "8080:80"
+      - '12010:80'
     x-casaos:
       volumes:
         - container: /data
           description:
             en_us: 'Container Path: /data'
       ports:
-        - container: "80"
+        - container: '80'
           description:
             en_us: 'Container Port: 80'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-budibase
-  # Detailed description for the application
   description:
-    en_us: "Low code platform for creating internal tools, workflows, and admin panels in minutes. Supports PostgreSQL, MySQL, MSSQL, MongoDB, Rest API, Docker, K8s, and more \U0001F680. Budibase, the low code platform you'll enjoy using ⚡"
-  # Brief tagline for the application
+    en_us: Low code platform for creating internal tools, workflows, and admin panels in minutes. Supports PostgreSQL, MySQL, MSSQL, MongoDB, Rest API, Docker, K8s, and more 🚀. Budibase, the low code platform you'll enjoy using ⚡
   tagline:
     en_us: Internal tools made easy.
-  # Developer's information
   developer: Budibase
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/budibase.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Budibase
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8080"
+  port_map: '12010'
+

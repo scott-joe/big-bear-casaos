@@ -1,60 +1,37 @@
-# Configuration for dbgate setup
-
-# Name of the big-bear-dbgate application
 name: big-bear-dbgate
-# Service definitions for the big-bear-dbgate application
 services:
-  # Service name: big-bear-dbgate
-  # The `big-bear-dbgate` service definition
   big-bear-dbgate:
-    # Name of the container
     container_name: big-bear-dbgate
-    # Image to be used for the container
     image: dbgate/dbgate:7.1.2-alpine
-    # Container restart policy
     restart: unless-stopped
-    # Volumes to be mounted to the container
     volumes:
-      # Mounting the local homarr/configs directory to /app/data/configs inside the container
-      - /DATA/AppData/$AppID/config:/root/.dbgate
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/config:/root/.dbgate
     ports:
-      # Mapping port 3000 of the host to port 3000 of the container
-      - "3000:3000"
+      - '12023:3000'
     x-casaos:
       volumes:
         - container: /root/.dbgate
           description:
             en_us: 'Container Path: /root/.dbgate'
       ports:
-        - container: "3000"
+        - container: '3000'
           description:
             en_us: 'Container Port: 3000'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: big-bear-dbgate
-  # Detailed description for the application
   description:
     en_us: Web based UI for managing and exploring SQL database data
-  # Brief tagline for the application
   tagline:
     en_us: DBGate
-  # Developer's information
   developer: dbgate
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps/apps/dbgate/logo.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: DBGate
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "3000"
+  port_map: '12023'
+

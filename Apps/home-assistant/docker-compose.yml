@@ -1,27 +1,13 @@
-# Configuration for home-assistant setup
-
-# Name of the big-bear-home-assistant application
 name: big-bear-home-assistant
-# Service definitions for the big-bear-home-assistant application
 services:
-  # Service name: app
-  # The `app` service definition
   app:
-    # Name of the container
     container_name: big-bear-home-assistant
-    # Image to be used for the container
     image: ghcr.io/home-assistant/home-assistant:2026.2.3
-    # Container restart policy
     restart: unless-stopped
-    # Volumes to be mounted to the container
     volumes:
-      # Mounting the local home-assistant_config directory to /config inside the container
-      - /DATA/AppData/$AppID/config:/config
-      # Mounting the local /etc/localtime to /etc/localtime inside the container
+      - /DATA/.docker/AppData/$AppID/config:/config
       - /etc/localtime:/etc/localtime:ro
-      # Mounting the local /run/dbus to /run/dbus inside the container
       - /run/dbus:/run/dbus:ro
-    # Network mode for the container
     network_mode: host
     x-casaos:
       volumes:
@@ -35,30 +21,20 @@ services:
           description:
             en_us: 'Container Path: /run/dbus'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: Open source home automation that puts local control and privacy first. Powered by a worldwide community of tinkerers and DIY enthusiasts. Perfect to run on a Raspberry Pi or a local server.
-  # Brief tagline for the application
   tagline:
     en_us: Home Automation
-  # Developer's information
   developer: home-assistant
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/home-assistant.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Home Assistant
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8123"
+  port_map: '8123'
+

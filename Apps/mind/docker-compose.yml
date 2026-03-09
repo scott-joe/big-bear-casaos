@@ -1,16 +1,14 @@
-# Configuration for big-bear-mind setup
 name: big-bear-mind
-# Service definitions for the big-bear-mind application
 services:
   app:
-    image: "mrcas/mind:v1.4.1"
+    image: mrcas/mind:v1.4.1
     container_name: mind
     environment:
       - TZ=UTC
     volumes:
-      - "/DATA/AppData/$AppID/db:/app/db"
+      - /DATA/.docker/AppData/$AppID/db:/app/db
     ports:
-      - "8080:8080"
+      - '12080:8080'
     x-casaos:
       envs:
         - container: TZ
@@ -21,34 +19,24 @@ services:
           description:
             en_us: 'Container Path: /app/db'
       ports:
-        - container: "8080"
+        - container: '8080'
           description:
             en_us: 'Container Port: 8080'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
     - arm64
-  # Main service for this application
   main: app
-  # Detailed description for the application
   description:
     en_us: A simple self hosted reminder application that can send push notifications to your device. Set the reminder and forget about it!
-  # Brief tagline for the application
   tagline:
     en_us: A simple self hosted reminder application that can send push notifications to your device. Set the reminder and forget about it!
-  # Developer's information
   developer: Casvt
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://i.imgur.com/UgjalkK.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: MIND
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "8080"
+  port_map: '12080'
+

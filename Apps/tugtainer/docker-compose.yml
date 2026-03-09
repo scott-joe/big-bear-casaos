@@ -1,32 +1,20 @@
-# Configuration for tugtainer setup
-
-# Name of the big-bear-tugtainer application
 name: big-bear-tugtainer
-# Service definitions for the big-bear-tugtainer application
 services:
-  # Service name: big-bear-tugtainer
-  # The `big-bear-tugtainer` service definition
   big-bear-tugtainer:
-    # Name of the container
     container_name: big-bear-tugtainer
-    # Image to be used for the container
     image: quenary/tugtainer:v1.24.1
-    # Container restart policy
     restart: unless-stopped
-    # Ports to expose from the container
     ports:
-      - "9412:80"
-    # Environment variables for the container
+      - '9412:80'
     environment:
-      TZ: "UTC"
-      LOG_LEVEL: "warning"
-      JWT_SECRET_KEY: "your-secret-key-here"
-      ACCESS_TOKEN_LIFETIME_MIN: "5"
-      REFRESH_TOKEN_LIFETIME_MIN: "43200"
-      HTTPS: "FALSE"
-    # Volumes to be mounted to the container
+      TZ: UTC
+      LOG_LEVEL: warning
+      JWT_SECRET_KEY: your-secret-key-here
+      ACCESS_TOKEN_LIFETIME_MIN: '5'
+      REFRESH_TOKEN_LIFETIME_MIN: '43200'
+      HTTPS: 'FALSE'
     volumes:
-      - /DATA/AppData/$AppID/data:/tugtainer
+      - /DATA/.docker/AppData/$AppID/data:/tugtainer
       - /var/run/docker.sock:/var/run/docker.sock
     x-casaos:
       envs:
@@ -56,38 +44,27 @@ services:
           description:
             en_us: 'Container Path: /var/run/docker.sock'
       ports:
-        - container: "80"
+        - container: '80'
           description:
             en_us: 'Container Port: 80'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
-  # Main service for this application
   main: big-bear-tugtainer
-  # Detailed description for the application
   description:
     en_us: Tugtainer is a self-hosted app for automating updates of your docker containers with a web UI. It's like watchtower but with more control and a user-friendly interface.
-  # Screenshot links for the application
   screenshot_link:
     - https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps@main/apps/tugtainer/screenshots/screenshot-1.png
     - https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps@main/apps/tugtainer/screenshots/screenshot-2.png
     - https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps@main/apps/tugtainer/screenshots/screenshot-3.png
-  # Brief tagline for the application
   tagline:
     en_us: Docker Container Update Automator
-  # Developer's information
   developer: Quenary
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/docker.png
-  # Thumbnail image for the application (if any)
   thumbnail: https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps/apps/tugtainer/screenshot-1.png
-  # Title for the application
   title:
     en_us: Tugtainer
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "9412"
+  port_map: '9412'
+

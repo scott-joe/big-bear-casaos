@@ -1,34 +1,20 @@
-# Configuration for faster-whisper setup
-
-# Name of the big-bear-faster-whisper application
 name: big-bear-faster-whisper
-# Service definitions for the big-bear-faster-whisper application
 services:
-  # Service name: big-bear-faster-whisper
-  # The `big-bear-faster-whisper` service definition
   big-bear-faster-whisper:
-    # Name of the container
     container_name: big-bear-faster-whisper
-    # Image to be used for the container
     image: linuxserver/faster-whisper:3.1.0
-    # Container restart policy
     restart: unless-stopped
-    # Environment variables
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
       - WHISPER_MODEL=tiny-int8
-      - WHISPER_BEAM=1 #optional
-      - WHISPER_LANG=en #optional
-    # Volumes to be mounted to the container
+      - WHISPER_BEAM=1
+      - WHISPER_LANG=en
     volumes:
-      # Mounting the local faster-whisper_config directory to /config inside the container
-      - /DATA/AppData/$AppID/config:/config
-    # Ports mapping between host and container
+      - /DATA/.docker/AppData/$AppID/config:/config
     ports:
-      # Mapping port 10300 of the host to port 10300 of the container
-      - "10300:10300"
+      - '10300:10300'
     x-casaos:
       envs:
         - container: PUID
@@ -54,33 +40,23 @@ services:
           description:
             en_us: 'Container Path: /config'
       ports:
-        - container: "10300"
+        - container: '10300'
           description:
             en_us: 'Container Port: 10300'
 x-casaos:
-  # Supported CPU architectures for this application
   architectures:
     - amd64
-  # Main service for this application
   main: big-bear-faster-whisper
-  # Detailed description for the application
   description:
     en_us: Faster-whisper is a reimplementation of OpenAI's Whisper model using CTranslate2, which is a fast inference engine for Transformer models. This container provides a Wyoming protocol server for faster-whisper.
-  # Brief tagline for the application
   tagline:
     en_us: Faster-whisper
-  # Developer's information
   developer: systran
-  # Author of this particular configuration
   author: BigBearTechWorld
-  # Icon URL for the application
   icon: https://cdn.jsdelivr.net/gh/bigbeartechworld/big-bear-universal-apps/apps/faster-whisper/logo.png
-  # Thumbnail image for the application (if any)
-  thumbnail: ""
-  # Title for the application
+  thumbnail: ''
   title:
     en_us: Faster-whisper
-  # Category under which the application falls
   category: BigBearCasaOS
-  # Default port mapping for the application
-  port_map: "7575"
+  port_map: '10300'
+
