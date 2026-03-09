@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "description": "Host port allocation and compatibility policy for app manifests.",
+  "enforceUniqueHostPorts": true,
+  "authoritativeField": "x-casaos.port_map",
+  "preferredRanges": [
+    {
+      "name": "default-app-range",
+      "start": 12000,
+      "end": 19999
+    }
+  ],
+  "reservedHostPorts": [
+    53,
+    67,
+    80,
+    81,
+    443,
+    1900,
+    2022,
+    32400
+  ],
+  "hostNetworkApps": [
+    "adguard-home-host",
+    "cloudflared-web",
+    "eufy-security-ws",
+    "gladys",
+    "home-assistant",
+    "homebridge",
+    "matterbridge",
+    "music-assistant",
+    "netalertx",
+    "npmplus",
+    "playit-docker-web",
+    "plex",
+    "plex-nvidia",
+    "poste-io",
+    "python-matter-server",
+    "scrypted",
+    "tp-link-omada-controller",
+    "upsnap",
+    "watchyourlan"
+  ],
+  "explicitAssignments": {},
+  "notes": [
+    "Use explicitAssignments for apps that must keep fixed host ports.",
+    "When assigning ports, keep x-casaos.port_map aligned with the effective primary host port."
+  ]
+}
