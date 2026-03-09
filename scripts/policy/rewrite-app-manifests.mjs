@@ -13,6 +13,13 @@ const getArgValue = (name) => {
   return args[index + 1];
 };
 
+const getRangeExceptionSetForApp = (rangePortExceptions, appId) => {
+  if (!rangePortExceptions || typeof rangePortExceptions !== "object") return new Set();
+  const entries = rangePortExceptions[appId];
+  if (!Array.isArray(entries)) return new Set();
+  return new Set(entries.map((value) => normalizePortEntryString(value)));
+};
+
 const writeMode = hasArg("--write");
 const dryRun = writeMode ? false : true;
 const verbose = hasArg("--verbose");
@@ -304,6 +311,8 @@ const rewritePathStringValue = ({ appId, value, storagePolicy }) => {
   return { updated, changed: updated !== value };
 };
 
+
+const normalizePortEntryString = (value) => String(value).trim().replace(/^['"]|['"]$/gu, "");
 const getServiceEntries = (doc) => {
   if (!doc || typeof doc !== "object" || !doc.services || typeof doc.services !== "object") {
     return [];
@@ -516,6 +525,7 @@ const findPrimaryPortForPortMap = (doc) => {
 
 const storagePolicy = readJson(STORAGE_POLICY_PATH);
 const portPolicy = readJson(PORT_POLICY_PATH);
+const rangePortExceptions = portPolicy?.rangePortExceptions ?? {};
 
 if (!fs.existsSync(APPS_DIR)) {
   throw new Error(`Apps directory not found: ${APPS_DIR}`);
@@ -757,6 +767,14 @@ for (const context of contexts) {
           parsed = parsePortString(portEntry);
           if (!parsed.parsable || !parsed.hasPublished || parsed.published === null) {
             if (!parsed.parsable && parsed.reason) {
+              const normalizedPortEntry = normalizePortEntryString(portEntry);
+              const appRangeExceptions = getRangeExceptionSetForApp(rangePortExceptions, appId);
+              if (
+                parsed.reason === "port ranges are not supported" &&
+                appRangeExceptions.has(normalizedPortEntry)
+              ) {
+                return;
+              }
               context.warnings.push(
                 `${serviceName}.ports[${index}] skipped (${parsed.reason}): ${portEntry}`
               );
